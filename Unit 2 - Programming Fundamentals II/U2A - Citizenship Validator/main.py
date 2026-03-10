@@ -30,9 +30,9 @@ def main(): # Mainline logic
         cin_display = first_letter + number_text
 
         if check_CIN.is_valid(number_value):
-            print(f"{cin_display} is valid.")
+            print(cin_display, "is valid.")
         else:
-            print(f"{cin_display} is invalid.")
+            print(cin_display, "is invalid.")
 
 
 main()
