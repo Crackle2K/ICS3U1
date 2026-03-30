@@ -1,0 +1,13 @@
+Computer science is a vast and fascinating field of study.
+I started to learn how to program in 1983 (at the ripe old age of 11) and most of my earliest programs were simple games and animations.
+Learning to program doesn't have to be boring!
+Game programming provides all the same challenges as other kinds of programming, but games are also visual and interactive which I think helps to motivate students new to the field.
+
+Learning to program games is even more fun than playing them because you can design and create your own world.
+But even though games are fun, they are also a serious business; in fact game development is a multi-billion dollar industry employing thousands of computer science graduates.  
+To become a game developer requires a solid foundation in the principles of computer science and a zest for life-long learning.
+
+Programming is a marvellous, vital, and intellectually stimulating activity.
+After 27 years I still get a kick out of learning new programming languages, and even more satisfaction sharing what I know with others.   
+It is my sincere wish that this course mark the beginning of a life-long interest in computing for you as well.
+Let's get started!
