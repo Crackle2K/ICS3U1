@@ -4,7 +4,7 @@ Date: March 29th, 2026
 Description: Simple program that iterates through each line to count words and characters, before finally calculating the averages.
 """
 
-file = open("textfile.txt", "r")
+file = open("Unit 3 - Advanced Topics/3.6 - More Lists and Tuples/textfile.txt", "r")
 lines = file.readlines()
 file.close()
 
