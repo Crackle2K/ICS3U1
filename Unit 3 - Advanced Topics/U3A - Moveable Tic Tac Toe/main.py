@@ -7,7 +7,7 @@ Description:
 import random
 
 def go_first_check():
-    """ This is a function that asks if the player would like to go first, and returns True or False."""
+    """ This is a function that asks if the player would like to go first, and returns True or False. """
     go_first = False
     check = input("Would you like to go first? (Y/N): ")
     if check.lower() == 'y':
@@ -19,6 +19,7 @@ def go_first_check():
     return go_first
 
 def winner(board):
+    """ This is a function that checks if someone has currently won the game, and if so it will return the winner's symbol. """
     
     # Horizontal win check
     for row in range(3):
@@ -39,6 +40,7 @@ def winner(board):
     return ""
 
 def display_board(board):
+    """ This is a function that displays the current state of the board, returning nothing. """
     
     print("   1   2   3")
     for row in range(3):
@@ -52,6 +54,8 @@ def display_board(board):
             print(" ---+---+---")
     
 def make_user_move(board):
+    """ This is a function that allows the user to input a move, to then fill in a spot on the board. """
+    
     valid_move = False
     while not valid_move:
         try:
@@ -67,6 +71,9 @@ def make_user_move(board):
             print("Sorry, invalid square. Please try again!\n")
 
 def make_computer_move(board):
+    """ This is a function that allows the computer to make a move, checking if a random spot is occupied then filling it in."""
+    # We need to make this smarter
+    
     valid_move = False
     while not valid_move:
         random_row = random.randint(0, 2)
@@ -78,6 +85,7 @@ def make_computer_move(board):
             print("Sorry, invalid square. Please try again!\n")
 
 def main():
+    """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
     free_cells = 9
     if go_first_check() == True:
         users_turn = True
