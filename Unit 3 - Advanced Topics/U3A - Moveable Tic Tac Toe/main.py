@@ -12,6 +12,11 @@ def go_first_check():
     check = input("Would you like to go first? (Y/N): ")
     if check.lower() == 'y':
         go_first = True
+    elif check.lower() == 'n':
+        go_first = False
+    else:
+        go_first_check()
+    return go_first
 
 def winner(board):
     
@@ -74,7 +79,10 @@ def make_computer_move(board):
 
 def main():
     free_cells = 9
-    users_turn = True
+    if go_first_check() == True:
+        users_turn = True
+    else:
+        users_turn = False
     ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
     while not winner(ttt_board) and (free_cells > 0):
         display_board(ttt_board)
