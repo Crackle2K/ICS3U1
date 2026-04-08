@@ -1,7 +1,7 @@
 """
-Authors:
-Date:
-Description:
+Authors: Dinesh Sinnathamby, Dhani Shah
+Date: April 8th, 2026
+Description: This program creating a moveable Tic-Tac-Toe game, where once both the user and the computer have completed three moves without anyone winning, the oppurtunity to move a previous piece will appear, creating a more fun and complex twist on standard Tic-Tac-Toe.
 """
 
 import random
