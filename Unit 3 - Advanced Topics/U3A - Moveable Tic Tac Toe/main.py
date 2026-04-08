@@ -1,7 +1,10 @@
 """
 Authors: Dinesh Sinnathamby, Dhani Shah
 Date: April 8th, 2026
-Description: This program creating a moveable Tic-Tac-Toe game, where once both the user and the computer have completed three moves without anyone winning, the oppurtunity to move a previous piece will appear, creating a more fun and complex twist on standard Tic-Tac-Toe.
+Description: This program creating a moveable Tic-Tac-Toe game, 
+where once both the user and the computer have completed three moves 
+\without anyone winning, the oppurtunity to move a previous piece will appear, 
+creating a more fun and complex twist on standard Tic-Tac-Toe.
 """
 
 import random
@@ -86,22 +89,24 @@ def make_computer_move(board):
 
 def main():
     """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
-    free_cells = 9
-    if go_first_check() == True:
-        users_turn = True
-    else:
-        users_turn = False
     ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
+    users_turn = go_first_check()
+    free_cells = 9
+    
     while not winner(ttt_board) and (free_cells > 0):
         display_board(ttt_board)
         if users_turn:
+            print("Your turn")
             make_user_move(ttt_board)
-            users_turn = not users_turn
+            if winner(ttt_board):
+                break
         else:
+            print("Computers turn")
             make_computer_move(ttt_board)
-            users_turn = not users_turn
             free_cells -= 1
-        display_board(ttt_board)
+        users_turn = not users_turn
+        
+    display_board(ttt_board)
     if (winner(ttt_board) == 'X'):
         print ("Y O U W O N !")
     elif (winner(ttt_board) == 'O'):
