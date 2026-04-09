@@ -103,6 +103,7 @@ def display_hall_of_fame():
 
 def main():
     """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
+    display_hall_of_fame()
     ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
     users_turn = go_first_check()
     free_cells = 9
