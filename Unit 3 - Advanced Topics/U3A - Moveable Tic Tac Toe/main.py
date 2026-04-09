@@ -1,9 +1,9 @@
 """
 Authors: Dinesh Sinnathamby, Dhani Shah
 Date: April 8th, 2026
-Description: This program creating a moveable Tic-Tac-Toe game, 
+Description: This program creates a moveable Tic-Tac-Toe game, 
 where once both the user and the computer have completed three moves 
-\without anyone winning, the oppurtunity to move a previous piece will appear, 
+without anyone winning, the oppurtunity to move a previous piece will appear, 
 creating a more fun and complex twist on standard Tic-Tac-Toe.
 """
 
@@ -45,7 +45,7 @@ def winner(board):
 def display_board(board):
     """ This is a function that displays the current state of the board, returning nothing. """
     
-    print("   1   2   3")
+    print("   ".join(['   1', '2', '3']))
     for row in range(3):
         row_str = str(row + 1) + ": "
         for col in range(3):
