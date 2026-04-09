@@ -11,15 +11,13 @@ import random
 
 def go_first_check():
     """ This is a function that asks if the player would like to go first, and returns True or False. """
-    go_first = False
     check = input("Would you like to go first? (Y/N): ")
     if check.lower() == 'y':
-        go_first = True
+        return True
     elif check.lower() == 'n':
-        go_first = False
+        return False
     else:
         go_first_check()
-    return go_first
 
 def winner(board):
     """ This is a function that checks if someone has currently won the game, and if so it will return the winner's symbol. """
@@ -95,6 +93,7 @@ def make_computer_move(board):
             valid_move = True
         else:
             print("Sorry, invalid square. Please try again!\n")
+            
 def winner_comp_move(board, r, c, symbol):
     """ Check if move results in a win. """
     board[r][c] = symbol

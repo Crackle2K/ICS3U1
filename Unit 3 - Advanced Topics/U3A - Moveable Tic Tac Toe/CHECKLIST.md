@@ -30,17 +30,17 @@ computer should randomly pick another location if a grid cell is already full.
 message and end the program.
 
 8. Your program should use effective mainline logic. In addition to a main() function,
-create other functions to make your code as easily read as possible.
+create other functions to make your code as easily read as possible. ✅
 
 9. Your program should demonstrate mastery of the style rules we have discussed this
-year, including docstrings, code comments, and good variable names.
+year, including docstrings, code comments, and good variable names. ✅
 
 10. After you have completed requirements 1 through 9, enhance your game so that
 whenever the user wins, the game asks for their name and appends it to a text file
 called “HallOfFame.txt”. Before requirement #1, your program should display the
 names stored in the Hall of Fame, and number each name starting with 1. If the
 “HallOfFame.txt” file does not exist, the message “No Human Has Ever Beat Me..
-mwah-ha-ha-ha!” should be displayed instead.
+mwah-ha-ha-ha!” should be displayed instead. ✅
 
 11. In Tic-Tac-Toe (and Tic-Tactics), the first player can always win (or at least stalemate)
 by selecting the center grid cell and mirroring their opponent’s moves. After you have
