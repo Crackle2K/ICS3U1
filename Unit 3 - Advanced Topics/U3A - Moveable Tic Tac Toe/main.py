@@ -91,13 +91,15 @@ def add_hall_of_fame():
     """ This function adds the user to the Hall of Fame if they won the game. """
     name = input("What is your name? : ")
     with open("HallOfFame.txt", 'a') as file:
-        file.write(name)
+        file.write("\n" + name)
         
 def display_hall_of_fame():
     """ This function displays all users that have made it onto the Hall of Fame. """
     try:
         with open("HallOfFame.txt", 'r') as file:
-            print(file.read())
+            content = file.read()
+            words = content.split()
+            print("Hall of Fame: " + ", ".join(words))
     except FileNotFoundError:
         print("No Human Has Ever Beat Me... mwah-ha-ha-ha!")
 
