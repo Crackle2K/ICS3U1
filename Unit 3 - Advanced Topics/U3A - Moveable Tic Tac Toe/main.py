@@ -1,9 +1,9 @@
 """
 Authors: Dinesh Sinnathamby, Dhani Shah
 Date: April 8th, 2026
-Description: This program creating a moveable Tic-Tac-Toe game, 
+Description: This program creates a moveable Tic-Tac-Toe game, 
 where once both the user and the computer have completed three moves 
-\without anyone winning, the oppurtunity to move a previous piece will appear, 
+without anyone winning, the oppurtunity to move a previous piece will appear, 
 creating a more fun and complex twist on standard Tic-Tac-Toe.
 """
 
@@ -45,7 +45,7 @@ def winner(board):
 def display_board(board):
     """ This is a function that displays the current state of the board, returning nothing. """
     
-    print("   1   2   3")
+    print("   ".join(['   1', '2', '3']))
     for row in range(3):
         row_str = str(row + 1) + ": "
         for col in range(3):
@@ -101,9 +101,26 @@ def winner_comp_move(board, r, c, symbol):
     is_winner = winner(board) == symbol
     board[r][c] = " "  
     return is_winner
+            
+def add_hall_of_fame():
+    """ This function adds the user to the Hall of Fame if they won the game. """
+    name = input("What is your name? : ")
+    with open("HallOfFame.txt", 'a') as file:
+        file.write("\n" + name)
+        
+def display_hall_of_fame():
+    """ This function displays all users that have made it onto the Hall of Fame. """
+    try:
+        with open("HallOfFame.txt", 'r') as file:
+            content = file.read()
+            words = content.split()
+            print("Hall of Fame: " + ", ".join(words))
+    except FileNotFoundError:
+        print("No Human Has Ever Beat Me... mwah-ha-ha-ha!")
 
 def main():
     """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
+    display_hall_of_fame()
     ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
     users_turn = go_first_check()
     free_cells = 9
@@ -111,23 +128,24 @@ def main():
     while not winner(ttt_board) and (free_cells > 0):
         display_board(ttt_board)
         if users_turn:
-            print("Your turn")
+            print("Your turn!")
             make_user_move(ttt_board)
             if winner(ttt_board):
                 break
         else:
-            print("Computers turn")
+            print("Computers turn!")
             make_computer_move(ttt_board)
             free_cells -= 1
         users_turn = not users_turn
         
     display_board(ttt_board)
     if (winner(ttt_board) == 'X'):
-        print ("Y O U W O N !")
+        print ("You won!")
+        add_hall_of_fame()
     elif (winner(ttt_board) == 'O'):
-        print ("I W O N !")
+        print ("I won!")
     else:
-        print ("S T A L E M A T E !")
+        print ("Stalemate!")
         print ("\n*** GAME OVER ***\n")
 
 main()
