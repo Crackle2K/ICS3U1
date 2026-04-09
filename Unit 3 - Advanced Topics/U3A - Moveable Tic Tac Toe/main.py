@@ -75,8 +75,17 @@ def make_user_move(board):
 
 def make_computer_move(board):
     """ This is a function that allows the computer to make a move, checking if a random spot is occupied then filling it in."""
-    # We need to make this smarter
-    
+    for r in range(3):
+        for c in range(3):
+            if board[r][c] == " " and winner_comp_move(board,r,c,'O'):
+                board[r][c] = 'O'
+                
+    for r in range(3):
+        for c in range(3):
+            if board[r][c] == " " and winner_comp_move(board,r,c,'X'):
+                board[r][c] = 'O'
+                return
+            
     valid_move = False
     while not valid_move:
         random_row = random.randint(0, 2)
@@ -86,6 +95,12 @@ def make_computer_move(board):
             valid_move = True
         else:
             print("Sorry, invalid square. Please try again!\n")
+def winner_comp_move(board, r, c, symbol):
+    """ Check if move results in a win. """
+    board[r][c] = symbol
+    is_winner = winner(board) == symbol
+    board[r][c] = " "  
+    return is_winner
 
 def main():
     """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
