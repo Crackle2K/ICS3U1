@@ -145,6 +145,6 @@ def main():
         print ("I won!")
     else:
         print ("Stalemate!")
-        print ("\n*** GAME OVER ***\n")
+        print ("GAME OVER!")
 
 main()
