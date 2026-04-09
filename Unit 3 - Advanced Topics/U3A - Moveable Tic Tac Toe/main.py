@@ -86,6 +86,20 @@ def make_computer_move(board):
             valid_move = True
         else:
             print("Sorry, invalid square. Please try again!\n")
+            
+def add_hall_of_fame():
+    """ This function adds the user to the Hall of Fame if they won the game. """
+    name = input("What is your name? : ")
+    with open("HallOfFame.txt", 'a') as file:
+        file.write(name)
+        
+def display_hall_of_fame():
+    """ This function displays all users that have made it onto the Hall of Fame. """
+    try:
+        with open("HallOfFame.txt", 'r') as file:
+            print(file.read())
+    except FileNotFoundError:
+        print("No Human Has Ever Beat Me... mwah-ha-ha-ha!")
 
 def main():
     """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
@@ -96,23 +110,24 @@ def main():
     while not winner(ttt_board) and (free_cells > 0):
         display_board(ttt_board)
         if users_turn:
-            print("Your turn")
+            print("Your turn!")
             make_user_move(ttt_board)
             if winner(ttt_board):
                 break
         else:
-            print("Computers turn")
+            print("Computers turn!")
             make_computer_move(ttt_board)
             free_cells -= 1
         users_turn = not users_turn
         
     display_board(ttt_board)
     if (winner(ttt_board) == 'X'):
-        print ("Y O U W O N !")
+        print ("You won!")
+        add_hall_of_fame()
     elif (winner(ttt_board) == 'O'):
-        print ("I W O N !")
+        print ("I won!")
     else:
-        print ("S T A L E M A T E !")
+        print ("Stalemate!")
         print ("\n*** GAME OVER ***\n")
 
 main()
