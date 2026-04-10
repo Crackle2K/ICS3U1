@@ -51,4 +51,4 @@ center grid cell in the middle layer is not selectable when the layers are displ
 
 12. Create a level 1 smart move computer: The computer should foresee the apparent
 path to win for itself and to prevent the obvious potential winner from their opponent
-from playing a bet to prevent it.
+from playing a bet to prevent it. 
