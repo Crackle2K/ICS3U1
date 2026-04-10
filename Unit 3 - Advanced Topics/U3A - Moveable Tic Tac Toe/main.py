@@ -144,24 +144,24 @@ def display_hall_of_fame():
         print("No Human Has Ever Beat Me... mwah-ha-ha-ha!")
 
 def turn(ttt_board, free_cells, users_turn):
-    """This Function navigates between users turn and computers turn."""
+    """ This function navigates between users turn and computers turn. """
     while not winner(ttt_board) and (free_cells > 0):
         display_board(ttt_board)
         if users_turn:
             print("Your turn!")
             make_user_move(ttt_board)
-            user_moves = check_player_moves(ttt_board)
-            if user_moves == 3:
-                pass
+            #user_moves = check_player_moves(ttt_board)
+            #if user_moves == 3:
+            #    pass
                 # add in later
             if winner(ttt_board):
                 break
         else:
             print("Computers turn!")
             make_computer_move(ttt_board)
-            computer_moves = check_computer_moves(ttt_board)
-            if computer_moves == 3:
-                pass
+            #computer_moves = check_computer_moves(ttt_board)
+            #if computer_moves == 3:
+            #    pass
                 # add in later
             free_cells -= 1
         users_turn = not users_turn
@@ -172,7 +172,6 @@ def main():
     ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
     users_turn = go_first_check()
     free_cells = 9
-    user_moves, comp_moves = 3, 3
     
     turn(ttt_board, free_cells, users_turn)
 
