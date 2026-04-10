@@ -112,7 +112,8 @@ def make_user_move(board):
 
 def make_computer_move(board):
     """ This is a function that allows the computer to make a move, first checks if computer can win and takes that spot
-    then checks if user can win and takes that spot, then if nothing is winable it goes to a random spot"""
+    then checks if user can win and takes that spot, then if nothing is winable it goes to a random spot. """
+    
     for r in range(3):
         for c in range(3):
             if board[r][c] == " " and winner_comp_move(board,r,c,'O'):
@@ -137,6 +138,7 @@ def make_computer_move(board):
             
 def winner_comp_move(board, r, c, symbol):
     """ Check if move results in a win. """
+    
     board[r][c] = symbol
     is_winner = winner(board) == symbol
     board[r][c] = " "  
@@ -150,6 +152,7 @@ def add_hall_of_fame():
         
 def display_hall_of_fame():
     """ This function displays all users that have made it onto the Hall of Fame. """
+    
     try:
         with open("HallOfFame.txt", 'r') as file:
             content = file.read()
@@ -164,6 +167,7 @@ def display_hall_of_fame():
 
 def turn(ttt_board, free_cells, users_turn):
     """ This function navigates between users turn and computers turn. """
+    
     while not winner(ttt_board) and (free_cells > 0):
         display_board(ttt_board)
         if users_turn:
@@ -187,6 +191,7 @@ def turn(ttt_board, free_cells, users_turn):
 
 def main():
     """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
+    
     display_hall_of_fame()
     ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
     users_turn = go_first_check()
