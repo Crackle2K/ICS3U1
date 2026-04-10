@@ -18,7 +18,7 @@ def go_first_check():
     elif check.lower() == 'n':
         return False
     else:
-        go_first_check()
+        return go_first_check()
 
 def winner(board):
     """ This is a function that checks if someone has currently won the game, and if so it will return the winner's symbol. """
