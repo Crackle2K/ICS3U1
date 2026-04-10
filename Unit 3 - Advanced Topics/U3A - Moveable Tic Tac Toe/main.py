@@ -46,8 +46,9 @@ def check_player_moves(board):
     player_moves = 0
     for row in range(3):
         for column in range(3):
-            if [row][column] == 'X':
+            if board[row][column] == 'X':
                 player_moves += 1
+                
     return player_moves
                 
 def check_computer_moves(board):
@@ -56,9 +57,27 @@ def check_computer_moves(board):
     computer_moves = 0
     for row in range(3):
         for column in range(3):
-            if [row][column] == 'O':
+            if board[row][column] == 'O':
                 computer_moves += 1
     return computer_moves
+
+def user_remove_tile(board):
+    """ This is a function that allows the user to remove a previous tile and select a new one, after they have done three moves."""
+    
+    occupiedTile = False
+    while not occupiedTile:
+        try:
+            remove_row = int(input("What row would you like to remove from (1-3): "))
+            remove_col = int(input("What col would you like to remove from (1-3): "))
+        except ValueError:
+            print("Sorry, please enter a number.\n")
+            continue
+        if (1 <= remove_row <= 3) and (1 <= remove_col <= 3) and (board[remove_row - 1][remove_col - 1] == 'X'):
+            board[remove_row - 1][remove_col - 1] = ' '
+            occupiedTile = True
+        else:
+            print("Sorry, you cannot remove your symbol from this tile. Please try again!\n")
+        
 
 def display_board(board):
     """ This is a function that displays the current state of the board, returning nothing. """
@@ -150,10 +169,10 @@ def turn(ttt_board, free_cells, users_turn):
         if users_turn:
             print("Your turn!")
             make_user_move(ttt_board)
-            #user_moves = check_player_moves(ttt_board)
-            #if user_moves == 3:
-            #    pass
-                # add in later
+            user_moves = check_player_moves(ttt_board)
+            if user_moves >= 3:
+                display_board(ttt_board)
+                user_remove_tile(ttt_board)
             if winner(ttt_board):
                 break
         else:
