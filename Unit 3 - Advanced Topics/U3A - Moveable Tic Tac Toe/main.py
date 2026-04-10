@@ -9,6 +9,7 @@ creating a more fun and complex twist on standard Tic-Tac-Toe.
 
 import random
 
+
 def go_first_check():
     """ This is a function that asks if the player would like to go first, and returns True or False. """
     check = input("Would you like to go first? (Y/N): ")
@@ -54,7 +55,7 @@ def display_board(board):
         if row < 2:
             print(" ---+---+---")
     
-def make_user_move(board):
+def make_user_move(board, user_moves):
     """ This is a function that allows the user to input a move, to then fill in a spot on the board. """
     
     valid_move = False
@@ -71,7 +72,7 @@ def make_user_move(board):
         else:
             print("Sorry, invalid square. Please try again!\n")
 
-def make_computer_move(board):
+def make_computer_move(board, computer_moves):
     """ This is a function that allows the computer to make a move, checking if a random spot is occupied then filling it in."""
     for r in range(3):
         for c in range(3):
@@ -123,17 +124,18 @@ def main():
     ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
     users_turn = go_first_check()
     free_cells = 9
+    user_moves, comp_moves = 3, 3
     
     while not winner(ttt_board) and (free_cells > 0):
         display_board(ttt_board)
         if users_turn:
             print("Your turn!")
-            make_user_move(ttt_board)
+            make_user_move(ttt_board, user_moves)
             if winner(ttt_board):
                 break
         else:
             print("Computers turn!")
-            make_computer_move(ttt_board)
+            make_computer_move(ttt_board, comp_moves)
             free_cells -= 1
         users_turn = not users_turn
         
