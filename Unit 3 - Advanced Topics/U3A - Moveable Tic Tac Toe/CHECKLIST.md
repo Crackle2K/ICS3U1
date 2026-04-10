@@ -17,7 +17,7 @@ diagonally-- on the same layer or between layers. A stalemate occurs when all th
 cells are filled, but no one has won. ✅
 
 4. Once a player has all three marks placed on the grid, the player has to move a piece
-when it’s their turn.
+when it’s their turn. ✅
 
 5. When getting the user’s move (i.e., layer, row, and column), use input validation and
 exception handling techniques. For example, if a grid cell is already full, the user

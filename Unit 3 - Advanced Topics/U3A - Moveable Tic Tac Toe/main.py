@@ -52,7 +52,7 @@ def check_player_moves(board):
     return player_moves
                 
 def check_computer_moves(board):
-    """ This is a function that checks the amount of moves the player has done through the game. """
+    """ This is a function that checks the amount of moves the computer has done through the game. """
     
     computer_moves = 0
     for row in range(3):
@@ -146,6 +146,7 @@ def winner_comp_move(board, r, c, symbol):
             
 def add_hall_of_fame():
     """ This function adds the user to the Hall of Fame if they won the game. """
+    
     name = input("What is your name? : ")
     with open("HallOfFame.txt", 'a') as file:
         file.write("\n" + name)
