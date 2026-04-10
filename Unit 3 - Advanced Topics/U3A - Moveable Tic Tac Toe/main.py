@@ -9,7 +9,6 @@ creating a more fun and complex twist on standard Tic-Tac-Toe.
 
 import random
 
-
 def go_first_check():
     """ This is a function that asks if the player would like to go first, and returns True or False. """
     check = input("Would you like to go first? (Y/N): ")
@@ -41,6 +40,26 @@ def winner(board):
         
     return ""
 
+def check_player_moves(board):
+    """ This is a function that checks the amount of moves the player has done through the game. """
+    
+    player_moves = 0
+    for row in range(3):
+        for column in range(3):
+            if [row][column] == 'X':
+                player_moves += 1
+    return player_moves
+                
+def check_computer_moves(board):
+    """ This is a function that checks the amount of moves the player has done through the game. """
+    
+    computer_moves = 0
+    for row in range(3):
+        for column in range(3):
+            if [row][column] == 'O':
+                computer_moves += 1
+    return computer_moves
+
 def display_board(board):
     """ This is a function that displays the current state of the board, returning nothing. """
     
@@ -53,7 +72,7 @@ def display_board(board):
                 row_str += " | "
         print(row_str)
         if row < 2:
-            print(" ---+---+---")
+            print("  ---+---+---")
     
 def make_user_move(board):
     """ This is a function that allows the user to input a move, to then fill in a spot on the board. """
@@ -79,13 +98,13 @@ def make_computer_move(board):
         for c in range(3):
             if board[r][c] == " " and winner_comp_move(board,r,c,'O'):
                 board[r][c] = 'O'
-                return
+                
             
     for r in range(3):
         for c in range(3):
             if board[r][c] == " " and winner_comp_move(board,r,c,'X'):
                 board[r][c] = 'O'
-                return
+                
             
     valid_move = False
     while not valid_move:
@@ -131,11 +150,19 @@ def turn(ttt_board, free_cells, users_turn):
         if users_turn:
             print("Your turn!")
             make_user_move(ttt_board)
+            user_moves = check_player_moves(ttt_board)
+            if user_moves == 3:
+                pass
+                # add in later
             if winner(ttt_board):
                 break
         else:
             print("Computers turn!")
             make_computer_move(ttt_board)
+            computer_moves = check_computer_moves(ttt_board)
+            if computer_moves == 3:
+                pass
+                # add in later
             free_cells -= 1
         users_turn = not users_turn
 
