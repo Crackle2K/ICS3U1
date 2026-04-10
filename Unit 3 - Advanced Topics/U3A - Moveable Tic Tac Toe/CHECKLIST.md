@@ -3,12 +3,12 @@
 
 1. Your program should start by asking the user whether they want to go first. Then, it
 would be best if you used proper input validation so that only “y”, “Y”, “n”, or “N”
-are accepted as valid responses. 🟨 (Slightly broken, need to fix the auto defaulting to computers move if first response to prompt was a random character)
+are accepted as valid responses. ✅
 
 2. The Tic-Tac-toe board should be neatly displayed as three separate 3x3 grids (side-byside) using ASCII characters to divide the cells. Include numbers for each grid level,
 column, and row to assist the user in selecting where to put their next “X”. Hint:
 consider using the string function join() to make your code as efficient as possible
-and avoid the need for repetitive code or nested loops.
+and avoid the need for repetitive code or nested loops. ✅
 
 3. The game should alternate turns between the user (“X”) and the computer (“O”).
 After each player makes a move, check if there is a winner or a stalemate. To win,
@@ -52,3 +52,4 @@ center grid cell in the middle layer is not selectable when the layers are displ
 12. Create a level 1 smart move computer: The computer should foresee the apparent
 path to win for itself and to prevent the obvious potential winner from their opponent
 from playing a bet to prevent it. 
+

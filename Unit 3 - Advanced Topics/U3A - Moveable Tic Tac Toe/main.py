@@ -73,7 +73,8 @@ def make_user_move(board):
             print("Sorry, invalid square. Please try again!\n")
 
 def make_computer_move(board):
-    """ This is a function that allows the computer to make a move, checking if a random spot is occupied then filling it in."""
+    """ This is a function that allows the computer to make a move, first checks if computer can win and takes that spot
+    then checks if user can win and takes that spot, then if nothing is winable it goes to a random spot"""
     for r in range(3):
         for c in range(3):
             if board[r][c] == " " and winner_comp_move(board,r,c,'O'):
@@ -123,14 +124,8 @@ def display_hall_of_fame():
     except FileNotFoundError:
         print("No Human Has Ever Beat Me... mwah-ha-ha-ha!")
 
-def main():
-    """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
-    display_hall_of_fame()
-    ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
-    users_turn = go_first_check()
-    free_cells = 9
-    user_moves, comp_moves = 3, 3
-    
+def turn(ttt_board, free_cells, users_turn):
+    """This Function navigates between users turn and computers turn."""
     while not winner(ttt_board) and (free_cells > 0):
         display_board(ttt_board)
         if users_turn:
@@ -143,7 +138,17 @@ def main():
             make_computer_move(ttt_board)
             free_cells -= 1
         users_turn = not users_turn
-        
+
+def main():
+    """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
+    display_hall_of_fame()
+    ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
+    users_turn = go_first_check()
+    free_cells = 9
+    user_moves, comp_moves = 3, 3
+    
+    turn(ttt_board, free_cells, users_turn)
+
     display_board(ttt_board)
     if (winner(ttt_board) == 'X'):
         print ("You won!")
