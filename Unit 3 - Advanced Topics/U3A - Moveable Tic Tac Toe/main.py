@@ -55,7 +55,7 @@ def display_board(board):
         if row < 2:
             print(" ---+---+---")
     
-def make_user_move(board, user_moves):
+def make_user_move(board):
     """ This is a function that allows the user to input a move, to then fill in a spot on the board. """
     
     valid_move = False
@@ -72,7 +72,7 @@ def make_user_move(board, user_moves):
         else:
             print("Sorry, invalid square. Please try again!\n")
 
-def make_computer_move(board, computer_moves):
+def make_computer_move(board):
     """ This is a function that allows the computer to make a move, checking if a random spot is occupied then filling it in."""
     for r in range(3):
         for c in range(3):
@@ -114,7 +114,11 @@ def display_hall_of_fame():
         with open("HallOfFame.txt", 'r') as file:
             content = file.read()
             words = content.split()
-            print("Hall of Fame: " + ", ".join(words))
+            print("Hall of Fame")
+            index = 0
+            for word in words:
+                index += 1
+                print(str(index) + '.', word)
     except FileNotFoundError:
         print("No Human Has Ever Beat Me... mwah-ha-ha-ha!")
 
@@ -130,12 +134,12 @@ def main():
         display_board(ttt_board)
         if users_turn:
             print("Your turn!")
-            make_user_move(ttt_board, user_moves)
+            make_user_move(ttt_board)
             if winner(ttt_board):
                 break
         else:
             print("Computers turn!")
-            make_computer_move(ttt_board, comp_moves)
+            make_computer_move(ttt_board)
             free_cells -= 1
         users_turn = not users_turn
         
