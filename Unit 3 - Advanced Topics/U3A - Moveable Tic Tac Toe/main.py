@@ -30,7 +30,7 @@ def winner(board):
     # Vertical win check
     for column in range(3):
         if (board[0][column] == board[1][column] == board[2][column]) and (board[0][column] != " "):
-            return board[column][0]
+            return board[0][column]
         
     # Diagonal win check
     if (board[0][0] == board[1][1] == board[2][2]) and (board[0][0] != " "):
@@ -77,7 +77,8 @@ def make_computer_move(board):
         for c in range(3):
             if board[r][c] == " " and winner_comp_move(board,r,c,'O'):
                 board[r][c] = 'O'
-                
+                return
+            
     for r in range(3):
         for c in range(3):
             if board[r][c] == " " and winner_comp_move(board,r,c,'X'):
