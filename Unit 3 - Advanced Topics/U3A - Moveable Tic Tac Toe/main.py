@@ -30,13 +30,7 @@ def winner(board):
     # Vertical win check
     for column in range(3):
         if (board[0][column] == board[1][column] == board[2][column]) and (board[0][column] != " "):
-            return board[0][column]
-        
-    # Diagonal win check
-    if (board[0][0] == board[1][1] == board[2][2]) and (board[0][0] != " "):
-        return board[0][0]
-    if (board[0][2] == board[1][1] == board[2][0]) and (board[0][2] != " "):
-        return board[0][2]    
+            return board[0][column]  
         
     return ""
 
@@ -104,7 +98,10 @@ def make_user_move(board):
         except ValueError:
             print("Sorry, please enter a number.\n")
             continue
-        if (1 <= row <= 3) and (1 <= col <= 3) and (board[row - 1][col - 1] == " "):
+        if row == 2 and col ==2:
+            print("Invalid")
+            valid_move = False
+        elif: (1 <= row <= 3) and (1 <= col <= 3) and (board[row - 1][col - 1] == " "):
             board[row - 1][col - 1] = 'X'
             valid_move = True
         else:
@@ -112,22 +109,28 @@ def make_user_move(board):
 
 def make_computer_move(board):
     """ This is a function that allows the computer to make a move, first checks if computer can win and takes that spot
-    then checks if user can win and takes that spot, then if nothing is winable it goes to a random spot. """
-    
+    then checks if user can win and takes that spot, then if nothing is winable it goes to a random spot"""
+    #check each colum and row combination to see if computer can win
     for r in range(3):
         for c in range(3):
             if board[r][c] == " " and winner_comp_move(board,r,c,'O'):
                 board[r][c] = 'O'
-                
-            
+                return
+    #if computer can not win check if user can win and block them       
     for r in range(3):
         for c in range(3):
             if board[r][c] == " " and winner_comp_move(board,r,c,'X'):
                 board[r][c] = 'O'
-                
-            
+                return
+    #check if board is full
+    empty = 0 
+    for row in board:
+        for cell in row:
+            if cell == " ":
+                empty += 1
+    #if no winning situation place peice on random spot      
     valid_move = False
-    while not valid_move:
+    while not valid_move and empty > 0:
         random_row = random.randint(0, 2)
         random_column = random.randint(0, 2)
         if (0 <= random_row <= 2) and (0 <= random_column <= 2) and (board[random_row][random_column] == " "):
@@ -137,8 +140,7 @@ def make_computer_move(board):
             print("Sorry, invalid square. Please try again!\n")
             
 def winner_comp_move(board, r, c, symbol):
-    """ Check if move results in a win. """
-    
+    """ Check if a move results in a win. """
     board[r][c] = symbol
     is_winner = winner(board) == symbol
     board[r][c] = " "  
