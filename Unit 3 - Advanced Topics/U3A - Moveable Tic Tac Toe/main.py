@@ -82,7 +82,7 @@ def computer_remove_tile(board):
                 o_positions.append((r, c))
 
     best_to_remove = None
-    min_alignment = float('inf')
+    min_alignment = 3
 
     for pos in o_positions:
         r, c = pos
