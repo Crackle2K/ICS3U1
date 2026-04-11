@@ -1,9 +1,9 @@
 """
 Authors: Dinesh Sinnathamby, Dhani Shah
 Date: April 8th, 2026
-Description: This program creates a moveable Tic-Tac-Toe game, 
-where once both the user and the computer have completed three moves 
-without anyone winning, the oppurtunity to move a previous piece will appear, 
+Description: This program creates a moveable Tic-Tac-Toe game,
+where once both the user and the computer have completed three moves
+without anyone winning, the oppurtunity to move a previous piece will appear,
 creating a more fun and complex twist on standard Tic-Tac-Toe.
 """
 
@@ -21,33 +21,33 @@ def go_first_check():
 
 def winner(board):
     """ This is a function that checks if someone has currently won the game, and if so it will return the winner's symbol. """
-    
+
     # Horizontal win check
     for row in range(3):
         if (board[row][0] == board[row][1] == board[row][2]) and (board[row][0] != " "):
             return board[row][0]
-        
+
     # Vertical win check
     for column in range(3):
         if (board[0][column] == board[1][column] == board[2][column]) and (board[0][column] != " "):
-            return board[0][column]  
-        
+            return board[0][column]
+
     return ""
 
 def check_player_moves(board):
     """ This is a function that checks the amount of moves the player has done through the game. """
-    
+
     player_moves = 0
     for row in range(3):
         for column in range(3):
             if board[row][column] == 'X':
                 player_moves += 1
-                
+
     return player_moves
-                
+
 def check_computer_moves(board):
     """ This is a function that checks the amount of moves the computer has done through the game. """
-    
+
     computer_moves = 0
     for row in range(3):
         for column in range(3):
@@ -57,7 +57,7 @@ def check_computer_moves(board):
 
 def user_remove_tile(board):
     """ This is a function that allows the user to remove a previous tile and select a new one, after they have done three moves."""
-    
+
     occupiedTile = False
     while not occupiedTile:
         try:
@@ -71,11 +71,37 @@ def user_remove_tile(board):
             occupiedTile = True
         else:
             print("Sorry, you cannot remove your symbol from this tile. Please try again!\n")
-        
+
+def computer_remove_tile(board):
+    """ This is a function that allows the computer to remove a previous tile and select a new one, after they have done three moves. """
+
+    o_positions = []
+    for r in range(3):
+        for c in range(3):
+            if board[r][c] == 'O':
+                o_positions.append((r, c))
+
+    best_to_remove = None
+    min_alignment = float('inf')
+
+    for pos in o_positions:
+        r, c = pos
+        alignment = 0
+        for other_pos in o_positions:
+            if other_pos != pos:
+                other_r, other_c = other_pos
+                if other_r == r or other_c == c:
+                    alignment += 1
+        if alignment < min_alignment:
+            min_alignment = alignment
+            best_to_remove = pos
+
+    if best_to_remove:
+        board[best_to_remove[0]][best_to_remove[1]] = ' '
 
 def display_board(board):
     """ This is a function that displays the current state of the board, returning nothing. """
-    
+
     print("   ".join(['   1', '2', '3']))
     for row in range(3):
         row_str = str(row + 1) + ": "
@@ -86,10 +112,10 @@ def display_board(board):
         print(row_str)
         if row < 2:
             print("  ---+---+---")
-    
+
 def make_user_move(board):
     """ This is a function that allows the user to input a move, to then fill in a spot on the board. """
-    
+
     valid_move = False
     while not valid_move:
         try:
@@ -98,10 +124,7 @@ def make_user_move(board):
         except ValueError:
             print("Sorry, please enter a number.\n")
             continue
-        if row == 2 and col ==2:
-            print("Invalid")
-            valid_move = False
-        elif: (1 <= row <= 3) and (1 <= col <= 3) and (board[row - 1][col - 1] == " "):
+        if (1 <= row <= 3) and (1 <= col <= 3) and (board[row - 1][col - 1] == " "):
             board[row - 1][col - 1] = 'X'
             valid_move = True
         else:
@@ -109,53 +132,46 @@ def make_user_move(board):
 
 def make_computer_move(board):
     """ This is a function that allows the computer to make a move, first checks if computer can win and takes that spot
-    then checks if user can win and takes that spot, then if nothing is winable it goes to a random spot"""
-    #check each colum and row combination to see if computer can win
+    then checks if user can win and takes that spot, then if nothing is winable it goes to a random spot. """
+
     for r in range(3):
         for c in range(3):
-            if board[r][c] == " " and winner_comp_move(board,r,c,'O'):
+            if board[r][c] == " " and winner_comp_move(board, r, c, 'O'):
                 board[r][c] = 'O'
                 return
-    #if computer can not win check if user can win and block them       
+
     for r in range(3):
         for c in range(3):
-            if board[r][c] == " " and winner_comp_move(board,r,c,'X'):
+            if board[r][c] == " " and winner_comp_move(board, r, c, 'X'):
                 board[r][c] = 'O'
                 return
-    #check if board is full
-    empty = 0 
-    for row in board:
-        for cell in row:
-            if cell == " ":
-                empty += 1
-    #if no winning situation place peice on random spot      
+
     valid_move = False
-    while not valid_move and empty > 0:
+    while not valid_move:
         random_row = random.randint(0, 2)
         random_column = random.randint(0, 2)
-        if (0 <= random_row <= 2) and (0 <= random_column <= 2) and (board[random_row][random_column] == " "):
+        if board[random_row][random_column] == " ":
             board[random_row][random_column] = 'O'
             valid_move = True
-        else:
-            print("Sorry, invalid square. Please try again!\n")
-            
+
 def winner_comp_move(board, r, c, symbol):
-    """ Check if a move results in a win. """
+    """ Check if move results in a win. """
+
     board[r][c] = symbol
     is_winner = winner(board) == symbol
-    board[r][c] = " "  
+    board[r][c] = " "
     return is_winner
-            
+
 def add_hall_of_fame():
     """ This function adds the user to the Hall of Fame if they won the game. """
-    
+
     name = input("What is your name? : ")
     with open("HallOfFame.txt", 'a') as file:
         file.write("\n" + name)
-        
+
 def display_hall_of_fame():
     """ This function displays all users that have made it onto the Hall of Fame. """
-    
+
     try:
         with open("HallOfFame.txt", 'r') as file:
             content = file.read()
@@ -168,39 +184,45 @@ def display_hall_of_fame():
     except FileNotFoundError:
         print("No Human Has Ever Beat Me... mwah-ha-ha-ha!")
 
-def turn(ttt_board, free_cells, users_turn):
+def turn(ttt_board, users_turn):
     """ This function navigates between users turn and computers turn. """
-    
-    while not winner(ttt_board) and (free_cells > 0):
+
+    while not winner(ttt_board):
         display_board(ttt_board)
+
+        free_cells = sum(1 for r in range(3) for c in range(3) if ttt_board[r][c] == ' ')
+        if free_cells == 0:
+            break
+
+        player_moves = check_player_moves(ttt_board)
+        computer_moves = check_computer_moves(ttt_board)
+
         if users_turn:
             print("Your turn!")
-            make_user_move(ttt_board)
-            user_moves = check_player_moves(ttt_board)
-            if user_moves >= 3:
-                display_board(ttt_board)
+            if player_moves >= 3:
+                print("You already have 3 tiles on the board. Remove one before placing a new one.")
                 user_remove_tile(ttt_board)
-            if winner(ttt_board):
-                break
+                display_board(ttt_board)
+            make_user_move(ttt_board)
         else:
-            print("Computers turn!")
+            print("Computer's turn!")
+            if computer_moves >= 3:
+                computer_remove_tile(ttt_board)
             make_computer_move(ttt_board)
-            #computer_moves = check_computer_moves(ttt_board)
-            #if computer_moves == 3:
-            #    pass
-                # add in later
-            free_cells -= 1
+
+        if winner(ttt_board):
+            break
+
         users_turn = not users_turn
 
 def main():
     """ This is the mainline logic of our program, putting together all the various functions to have the program finally work. """
-    
+
     display_hall_of_fame()
-    ttt_board = [[" ", " ", " "],[" ", " ", " "],[" ", " ", " "]]
+    ttt_board = [[" ", " ", " "],[" ", "*", " "],[" ", " ", " "]]
     users_turn = go_first_check()
-    free_cells = 9
-    
-    turn(ttt_board, free_cells, users_turn)
+
+    turn(ttt_board, users_turn)
 
     display_board(ttt_board)
     if (winner(ttt_board) == 'X'):
