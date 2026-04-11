@@ -53,3 +53,8 @@ center grid cell in the middle layer is not selectable when the layers are displ
 path to win for itself and to prevent the obvious potential winner from their opponent
 from playing a bet to prevent it. 
 
+
+Reqirements to fix/finish:
+- make middle cell unuseable
+- limit moves to 3 then have to make around on the board
+- 10 moves maximum then stalemate  
