@@ -147,7 +147,7 @@ def make_computer_move(board):
                 return
 
     valid_move = False
-    while not valid_move:
+    while not valid_move: # Loop runs until the computer's move is finally valid
         random_row = random.randint(0, 2)
         random_column = random.randint(0, 2)
         if board[random_row][random_column] == " ":
@@ -225,12 +225,12 @@ def main():
     turn(ttt_board, users_turn)
 
     display_board(ttt_board)
-    if (winner(ttt_board) == 'X'):
+    if (winner(ttt_board) == 'X'): # Checks if the winner was the player
         print ("You won!")
         add_hall_of_fame()
-    elif (winner(ttt_board) == 'O'):
+    elif (winner(ttt_board) == 'O'): # Checks if the winner was the computer
         print ("I won!")
-    else:
+    else: # Checks if anything else is possible (which isn't due to the moving concept)
         print ("Stalemate!")
         print ("GAME OVER!")
 
