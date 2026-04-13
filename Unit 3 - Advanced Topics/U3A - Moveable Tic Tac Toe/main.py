@@ -187,7 +187,7 @@ def display_hall_of_fame():
 def turn(ttt_board, users_turn):
     """ This function navigates between users turn and computers turn. """
 
-    while not winner(ttt_board):
+    while not winner(ttt_board): # This loop goes on while a winner has not been found
         display_board(ttt_board)
 
         free_cells = sum(1 for r in range(3) for c in range(3) if ttt_board[r][c] == ' ')
@@ -197,16 +197,16 @@ def turn(ttt_board, users_turn):
         player_moves = check_player_moves(ttt_board)
         computer_moves = check_computer_moves(ttt_board)
 
-        if users_turn:
+        if users_turn: # Checks if it is currently the user's turn
             print("Your turn!")
-            if player_moves >= 3:
+            if player_moves >= 3: # Checks if the player has already done more than 3 moves
                 print("You already have 3 tiles on the board. Remove one before placing a new one.")
                 user_remove_tile(ttt_board)
                 display_board(ttt_board)
             make_user_move(ttt_board)
         else:
             print("Computer's turn!")
-            if computer_moves >= 3:
+            if computer_moves >= 3: # Checks if the computer has already done more than 3 moves
                 computer_remove_tile(ttt_board)
             make_computer_move(ttt_board)
 
