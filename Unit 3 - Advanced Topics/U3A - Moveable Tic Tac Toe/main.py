@@ -186,14 +186,12 @@ def display_hall_of_fame():
 
 def turn(ttt_board, users_turn):
     """ This function navigates between users turn and computers turn. """
-
+    moves_count = 0 
     while not winner(ttt_board):
         display_board(ttt_board)
-
-        free_cells = sum(1 for r in range(3) for c in range(3) if ttt_board[r][c] == ' ')
-        if free_cells == 0:
-            break
-
+        if moves_count == 16:
+            return 'STALEMATE'
+        
         player_moves = check_player_moves(ttt_board)
         computer_moves = check_computer_moves(ttt_board)
 
@@ -204,12 +202,13 @@ def turn(ttt_board, users_turn):
                 user_remove_tile(ttt_board)
                 display_board(ttt_board)
             make_user_move(ttt_board)
+            moves_count += 1
         else:
             print("Computer's turn!")
             if computer_moves >= 3: # Checks if the computer has already done more than 3 moves
                 computer_remove_tile(ttt_board)
             make_computer_move(ttt_board)
-
+            moves_count += 1 
         if winner(ttt_board):
             break
 
@@ -222,16 +221,16 @@ def main():
     ttt_board = [[" ", " ", " "],[" ", "*", " "],[" ", " ", " "]]
     users_turn = go_first_check()
 
-    turn(ttt_board, users_turn)
+    result = turn(ttt_board, users_turn)
 
     display_board(ttt_board)
-    if (winner(ttt_board) == 'X'):
+    if result == 'STALEMATE':
+        print ("Stalemate!")
+        print ("GAME OVER!")
+    elif (winner(ttt_board) == 'X'):
         print ("You won!")
         add_hall_of_fame()
     elif (winner(ttt_board) == 'O'): # Checks if the winner was the computer
         print ("I won!")
-    else:
-        print ("Stalemate!")
-        print ("GAME OVER!")
 
 main()
