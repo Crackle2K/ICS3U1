@@ -72,7 +72,7 @@ def user_remove_tile(board):
         else:
             print("Sorry, you cannot remove your symbol from this tile. Please try again!\n")
 
-def computer_remove_tile(board):
+def computer_remove_tile(board, last_move):
     """ This is a function that allows the computer to remove a previous tile and select a new one, after they have done three moves. """
 
     o_positions = []
@@ -98,6 +98,7 @@ def computer_remove_tile(board):
 
     if best_to_remove:
         board[best_to_remove[0]][best_to_remove[1]] = ' '
+        last_move[0], last_move[1] = best_to_remove[0], best_to_remove[1]
 
 def display_board(board):
     """ This is a function that displays the current state of the board, returning nothing. """
@@ -130,7 +131,7 @@ def make_user_move(board):
         else:
             print("Sorry, invalid square. Please try again!\n")
 
-def make_computer_move(board):
+def make_computer_move(board, last_move):
     """ This is a function that allows the computer to make a move, first checks if computer can win and takes that spot
     then checks if user can win and takes that spot, then if nothing is winable it goes to a random spot. """
 
@@ -151,8 +152,11 @@ def make_computer_move(board):
         random_row = random.randint(0, 2)
         random_column = random.randint(0, 2)
         if board[random_row][random_column] == " ":
-            board[random_row][random_column] = 'O'
-            valid_move = True
+            if (random_row == last_move[0]) and (random_column == last_move[1]):
+                valid_move = False
+            else:
+                board[random_row][random_column] = 'O'
+                valid_move = True
 
 def winner_comp_move(board, r, c, symbol):
     """ Check if move results in a win. """
@@ -186,6 +190,7 @@ def display_hall_of_fame():
 
 def turn(ttt_board, users_turn):
     """ This function navigates between users turn and computers turn. """
+    last_move = [0, 0]
 
     while not winner(ttt_board): # This loop goes on while a winner has not been found
         display_board(ttt_board)
@@ -209,6 +214,8 @@ def turn(ttt_board, users_turn):
             if computer_moves >= 3: # Checks if the computer has already done more than 3 moves
                 computer_remove_tile(ttt_board)
             make_computer_move(ttt_board)
+            computer_remove_tile(ttt_board, last_move)
+            make_computer_move(ttt_board, last_move)
 
         if winner(ttt_board):
             break
