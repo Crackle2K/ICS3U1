@@ -40,7 +40,7 @@ def check_player_moves(board):
     player_moves = 0
     for row in range(3):
         for column in range(3):
-            if board[row][column] == 'X':
+            if board[row][column] == 'X': # Checks if the tile belongs to the player, if so increases the player's moves by 1
                 player_moves += 1
 
     return player_moves
@@ -107,10 +107,10 @@ def display_board(board):
         row_str = str(row + 1) + ": "
         for col in range(3):
             row_str += board[row][col]
-            if col < 2:
+            if col < 2: # If the column is less then 2, it will place a wall in between
                 row_str += " | "
         print(row_str)
-        if row < 2:
+        if row < 2: # If the row is less than 2, it will place a wall in between
             print("  ---+---+---")
 
 def make_user_move(board):
