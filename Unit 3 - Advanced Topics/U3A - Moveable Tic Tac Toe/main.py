@@ -12,11 +12,11 @@ import random
 def go_first_check():
     """ This is a function that asks if the player would like to go first, and returns True or False. """
     check = input("Would you like to go first? (Y/N): ")
-    if check.lower() == 'y':
+    if check.lower() == 'y': # Checks if the user responded with yes
         return True
-    elif check.lower() == 'n':
+    elif check.lower() == 'n': # Checks if the user responded with no
         return False
-    else:
+    else: # Checks if the user responded with neither yes or no
         return go_first_check()
 
 def winner(board):
@@ -40,7 +40,7 @@ def check_player_moves(board):
     player_moves = 0
     for row in range(3):
         for column in range(3):
-            if board[row][column] == 'X':
+            if board[row][column] == 'X': # Checks if the tile belongs to the player, if so increases the player's moves by 1
                 player_moves += 1
 
     return player_moves
@@ -107,24 +107,24 @@ def display_board(board):
         row_str = str(row + 1) + ": "
         for col in range(3):
             row_str += board[row][col]
-            if col < 2:
+            if col < 2: # If the column is less then 2, it will place a wall in between
                 row_str += " | "
         print(row_str)
-        if row < 2:
+        if row < 2: # If the row is less than 2, it will place a wall in between
             print("  ---+---+---")
 
 def make_user_move(board):
     """ This is a function that allows the user to input a move, to then fill in a spot on the board. """
 
     valid_move = False
-    while not valid_move:
+    while not valid_move: # Loop runs until the user makes a valid move
         try:
             row = int(input("What row would you like to move to (1-3): "))
             col = int(input("What col would you like to move to (1-3): "))
         except ValueError:
             print("Sorry, please enter a number.\n")
             continue
-        if (1 <= row <= 3) and (1 <= col <= 3) and (board[row - 1][col - 1] == " "):
+        if (1 <= row <= 3) and (1 <= col <= 3) and (board[row - 1][col - 1] == " "): # Checks if the row and colum are valid
             board[row - 1][col - 1] = 'X'
             valid_move = True
         else:
@@ -150,7 +150,7 @@ def make_computer_move(board):
     while not valid_move: # Loop runs until the computer's move is finally valid
         random_row = random.randint(0, 2)
         random_column = random.randint(0, 2)
-        if board[random_row][random_column] == " ":
+        if board[random_row][random_column] == " ": # Checks if tile is empty
             board[random_row][random_column] = 'O'
             valid_move = True
 
@@ -203,13 +203,13 @@ def turn(ttt_board, users_turn):
                 display_board(ttt_board)
             make_user_move(ttt_board)
             moves_count += 1
-        else:
+        else: # Checks if it is currently the player's turn
             print("Computer's turn!")
             if computer_moves >= 3: # Checks if the computer has already done more than 3 moves
                 computer_remove_tile(ttt_board)
             make_computer_move(ttt_board)
             moves_count += 1 
-        if winner(ttt_board):
+        if winner(ttt_board): # If there is a winner, the game loop should stop
             break
 
         users_turn = not users_turn
@@ -228,6 +228,7 @@ def main():
         print ("Stalemate!")
         print ("GAME OVER!")
     elif (winner(ttt_board) == 'X'):
+    if (winner(ttt_board) == 'X'): # Checks if the winner was the player
         print ("You won!")
         add_hall_of_fame()
     elif (winner(ttt_board) == 'O'): # Checks if the winner was the computer
