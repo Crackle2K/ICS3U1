@@ -227,8 +227,7 @@ def main():
     if result == 'STALEMATE':
         print ("Stalemate!")
         print ("GAME OVER!")
-    elif (winner(ttt_board) == 'X'):
-    if (winner(ttt_board) == 'X'): # Checks if the winner was the player
+    elif (winner(ttt_board) == 'X'): # Checks if the winner was the player
         print ("You won!")
         add_hall_of_fame()
     elif (winner(ttt_board) == 'O'): # Checks if the winner was the computer
