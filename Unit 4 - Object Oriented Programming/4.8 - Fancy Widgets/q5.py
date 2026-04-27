@@ -1,9 +1,7 @@
 """
-Question 5: Electricity in Ontario is billed at the following rates:
-a. Off-Peak, $0.051 / kWh
-b. Mid-Peak $0.081 / kWh
-c. On-Peak $0.099 / kWh
-Create a GUI application that lets the user select a rate category via Radiobuttons and input an energy consumption value in Watts and time in hours into two Entry widgets. When they click the “OK” button, a dialog box should display their total electricity cost.
+Author: Dinesh Sinnathamby
+Date: April 27th, 2026
+Description: Simple GUI application that lets the user select a rate category via Radiobuttons and input an energy consumption value in Watts and time in hours into two Entry widgets. When they click the “OK” button, a dialog box should display their total electricity cost.
 """
 
 import tkinter as tk
