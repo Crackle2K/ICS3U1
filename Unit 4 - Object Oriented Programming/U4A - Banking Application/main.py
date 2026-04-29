@@ -37,4 +37,17 @@ class Checking(Account):
         
         
 class Savings(Account):
-    
+    def __init__(self, balance, accountnum, name, interest_rate):
+        Account.__init__(self, balance, accountnum, name)
+        self.__interest_rate = (interest_rate/100)
+        self.__interest_earned = 0
+
+    def calculate_interest(self):
+        
+        interest = self.get_balance * self.__interest_rate
+        new_balance = self.get_balance() + interest
+        self.set_balance(new_balance)
+        self.__interest_earned += interest
+        
+    def get_interest_earned(self):
+        return self.__interest_earned
