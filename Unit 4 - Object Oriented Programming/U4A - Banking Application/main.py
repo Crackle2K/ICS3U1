@@ -73,16 +73,18 @@ class LoginPage:
         self.bottom_frame.pack()
         
     def init_buttons(self):
+        self.sign_up_button = tk.Button(self.bottom_frame, text="Sign Up", command=self.sign_up)
         self.login_button = tk.Button(self.bottom_frame, text="Login", command=self.login)
         
+        self.sign_up_button.pack()
         self.login_button.pack()
         
     def init_labels(self):
         self.title = tk.Label(self.top_frame, text="Banking Application")
         self.prompt_username = tk.Label(self.top_frame, text="Enter your username: ")
-        self.username_entry = tk.Entry(self.top_frame, width=10)
+        self.username_entry = tk.Entry(self.top_frame, width=15)
         self.prompt_password = tk.Label(self.top_frame, text="Enter your password: ")
-        self.password_entry = tk.Entry(self.top_frame, width=10)
+        self.password_entry = tk.Entry(self.top_frame, width=15)
         
         self.title.pack()
         self.prompt_username.pack()
@@ -90,9 +92,40 @@ class LoginPage:
         self.prompt_password.pack()
         self.password_entry.pack()
         
+    def encrypt(self, text):
+        result = ""
+        for char in text:
+            if char.isalpha():
+                base = ord('A') if char.isupper() else ord('a')
+                result += chr((ord(char) - base + 3) % 26 + base)
+            else:
+                result += char
+        return result
+
+    def decrypt(self, text):
+        result = ""
+        for char in text:
+            if char.isalpha():
+                base = ord('A') if char.isupper() else ord('a')
+                result += chr((ord(char) - base - 3) % 26 + base)
+            else:
+                result += char
+        return result
+        
+    def sign_up(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        
+        database = open("userdata.txt", 'a')
+        database.write(self.encrypt(username + '\n'))
+        database.write(self.encrypt(password + '\n'))
+        
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
+        
+        database = open("userdata.txt", 'r')
+        
         
         messagebox.showinfo("Success", "You username is " + username + " and your password is " + password + '.')
         
