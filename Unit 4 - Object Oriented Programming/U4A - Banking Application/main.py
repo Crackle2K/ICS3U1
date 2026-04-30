@@ -62,9 +62,9 @@ class BankingApplication:
         self.main_window = tk.Tk()
         self.main_window.title("Banking System")
         self.main_window.geometry("400x400")
-        self.init_frames()
-        self.init_labels()
-        self.init_buttons()
+        self.init_login_frames()
+        self.init_login_labels()
+        self.init_login_buttons()
         
         tk.mainloop()
         
@@ -131,7 +131,17 @@ class BankingApplication:
         self.main_window.title("Banking Dashboard")
         self.main_window.geometry("400x400")
 
+        self.dash_frame = tk.Frame(self.main_window)
+        self.dash_frame.pack(padx=20, pady=20)
 
+        tk.Label(self.dash_frame, text="Banking Dashboard").pack(pady = 10)
+        tk.Label(self.dash_frame, text=("Account belongs to:", username)).pack()
+
+        tk.Button(self.dash_frame, text = "Checking Account", width=20, command=self.open_checking).pack(pady = 5)
+        tk.Button(self.dash_frame, text= "Savings Account", width=20, command=self.open_savings).pack(pady=5)
+        tk.Button(self.dash_frame, text="Logout", command=self.logout).pack(pady=20)
+    def logout(self):
+        pass
     def encrypt(self, text):
         result = ""
         for char in text:
@@ -155,29 +165,16 @@ class BankingApplication:
     def sign_up(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-        
+
         if (username == '' or password == ''):
             messagebox.showinfo("Error", "You cannot have a blank username or password!")
         else:
             database = open(self.encrypt(username) + ".txt", 'a')
             database.write(self.encrypt(username + '\n'))
             database.write(self.encrypt(password + '\n'))
-        
-    def login(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
-        
-        try:
-            database = open(self.encrypt(username) + ".txt", 'r')
-            user_data = database.readlines()
-            if password == self.decrypt(user_data[1]).strip():
-                messagebox.showinfo("Sucess", "Logged In!")
-            else:
-                messagebox.showinfo("Error", "Wrong password, please try again!")
-                print(password)
-                print(self.decrypt(user_data[1]).strip())
-            
-        except FileNotFoundError:
-            messagebox.showinfo("You haven't created an account with that name yet!")
+            messagebox.showinfo("Sucess", "Signed Up!")
+            self.top_frame.destroy()
+            self.bottom_frame.destroy()
+            self.show_dashboard(username)
         
 application = BankingApplication()
