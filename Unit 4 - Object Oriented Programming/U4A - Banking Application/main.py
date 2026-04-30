@@ -1,7 +1,8 @@
 """
 Authors: Dinesh Sinnathamby, Dhani Shah
 Date: April 29th, 2026
-Description: This is a secure online banking system program, built with Python's tkinter library. This program features a login system, banking dashboards, as well as a variety of different account features.
+Description: This is a secure online banking system program, built with Python's tkinter library. 
+This program features a login system, banking dashboards, as well as a variety of different account features.
 """
 
 import tkinter as tk
@@ -48,7 +49,7 @@ class Savings(Account):
 
     def calculate_interest(self):
         
-        interest = self.get_balance * self.__interest_rate
+        interest = self.get_balance() * self.__interest_rate
         new_balance = self.get_balance() + interest
         self.set_balance(new_balance)
         self.__interest_earned += interest
