@@ -57,7 +57,7 @@ class Savings(Account):
     def get_interest_earned(self):
         return self.__interest_earned
     
-class LoginPage:
+class BankingApplication:
     def __init__(self):
         self.main_window = tk.Tk()
         self.main_window.title("Banking System")
@@ -68,20 +68,25 @@ class LoginPage:
         
         tk.mainloop()
         
-    def init_frames(self):
+    def init_login_page(self):
+        self.init_login_frames()
+        self.init_login_labels()
+        self.init_login_buttons()
+        
+    def init_login_frames(self):
         self.top_frame = tk.Frame()
         self.bottom_frame = tk.Frame()
         self.top_frame.pack()
         self.bottom_frame.pack()
         
-    def init_buttons(self):
+    def init_login_buttons(self):
         self.sign_up_button = tk.Button(self.bottom_frame, text="Sign Up", command=self.sign_up)
         self.login_button = tk.Button(self.bottom_frame, text="Login", command=self.login)
         
         self.sign_up_button.pack()
         self.login_button.pack()
         
-    def init_labels(self):
+    def init_login_labels(self):
         self.title = tk.Label(self.top_frame, text="Banking Application")
         self.prompt_username = tk.Label(self.top_frame, text="Enter your username: ")
         self.username_entry = tk.Entry(self.top_frame, width=15)
@@ -102,7 +107,7 @@ class LoginPage:
         password = self.password_entry.get()
 
         try: 
-            database = open("userdata.txt", 'r')
+            database = open(self.encrypt(username) + ".txt", 'r')
             lines = database.readlines()
             database.close()
             valid = False
@@ -150,12 +155,29 @@ class LoginPage:
     def sign_up(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-        messagebox.showinfo("Success", "You username is " + username + " and your password is " + password + '.')
-
-        database = open("userdata.txt", 'a')
-        database.write(self.encrypt(username + '\n'))
-        database.write(self.encrypt(password + '\n'))
         
-    
+        if (username == '' or password == ''):
+            messagebox.showinfo("Error", "You cannot have a blank username or password!")
+        else:
+            database = open(self.encrypt(username) + ".txt", 'a')
+            database.write(self.encrypt(username + '\n'))
+            database.write(self.encrypt(password + '\n'))
         
-application = LoginPage()
+    def login(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        
+        try:
+            database = open(self.encrypt(username) + ".txt", 'r')
+            user_data = database.readlines()
+            if password == self.decrypt(user_data[1]).strip():
+                messagebox.showinfo("Sucess", "Logged In!")
+            else:
+                messagebox.showinfo("Error", "Wrong password, please try again!")
+                print(password)
+                print(self.decrypt(user_data[1]).strip())
+            
+        except FileNotFoundError:
+            messagebox.showinfo("You haven't created an account with that name yet!")
+        
+application = BankingApplication()
