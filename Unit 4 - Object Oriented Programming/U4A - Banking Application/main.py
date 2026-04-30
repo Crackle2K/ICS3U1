@@ -57,7 +57,7 @@ class Savings(Account):
     def get_interest_earned(self):
         return self.__interest_earned
     
-class LoginPage:
+class BankingApplication:
     def __init__(self):
         self.main_window = tk.Tk()
         self.init_frames()
@@ -117,7 +117,7 @@ class LoginPage:
         username = self.username_entry.get()
         password = self.password_entry.get()
         
-        database = open("userdata.txt", 'a')
+        database = open(self.encrypt(username) + ".txt", 'a')
         database.write(self.encrypt(username + '\n'))
         database.write(self.encrypt(password + '\n'))
         
@@ -125,9 +125,17 @@ class LoginPage:
         username = self.username_entry.get()
         password = self.password_entry.get()
         
-        database = open("userdata.txt", 'r')
+        try:
+            database = open(self.encrypt(username) + ".txt", 'r')
+            user_data = database.readlines()
+            if password == self.decrypt(user_data[1]).strip():
+                messagebox.showinfo("Sucess", "Logged In!")
+            else:
+                messagebox.showinfo("Error", "Wrong password, please try again!")
+                print(password)
+                print(self.decrypt(user_data[1]).strip())
+            
+        except FileNotFoundError:
+            messagebox.showinfo("You haven't created an account with that name yet!")
         
-        
-        messagebox.showinfo("Success", "You username is " + username + " and your password is " + password + '.')
-        
-application = LoginPage()
+application = BankingApplication()
