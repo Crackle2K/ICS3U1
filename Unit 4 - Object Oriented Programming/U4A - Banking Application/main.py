@@ -101,6 +101,7 @@ class BankingApplication:
         self.password_entry.pack()
         self.prompt_balance.pack()
         self.balance_entry.pack()
+        
 
     def login(self):
         username = self.username_entry.get()
@@ -127,7 +128,7 @@ class BankingApplication:
                 messagebox.showerror("Error", "Incorrect Username or Password")
         except FileNotFoundError:
             messagebox.showerror("Error", "No users registered yet!") 
-    def show_dsahboard(self, username):
+    def show_dashboard(self, username):
         self.main_window.title("Banking Dashboard")
         self.main_window.geometry("400x400")
 
@@ -135,13 +136,25 @@ class BankingApplication:
         self.dash_frame.pack(padx=20, pady=20)
 
         tk.Label(self.dash_frame, text="Banking Dashboard").pack(pady = 10)
-        tk.Label(self.dash_frame, text=("Account belongs to:", username)).pack()
+        tk.Label(self.dash_frame, text="Account belongs to: " + username).pack()
 
-        tk.Button(self.dash_frame, text = "Checking Account", width=20, command=self.open_checking).pack(pady = 5)
-        tk.Button(self.dash_frame, text= "Savings Account", width=20, command=self.open_savings).pack(pady=5)
-        tk.Button(self.dash_frame, text="Logout", command=self.logout).pack(pady=20)
-    def logout(self):
+        self.checking = tk.Button(self.dash_frame, text = "Checking Account", width=20, command=self.open_checking)
+        self.savings = tk.Button(self.dash_frame, text= "Savings Account", width=20, command=self.open_savings)
+        self.button_logout = tk.Button(self.dash_frame, text="Logout", command=self.logout)
+
+        self.checking.pack(padx=10)
+        self.savings.pack(padx=20)
+        self.button_logout.pack(padx=10)
+
+    def open_savings(self):
         pass
+    def open_checking(self):
+        pass
+    def logout(self):
+        self.dash_frame.destroy()
+        self.init_frames()
+        self.init_labels()
+        self.init_buttons()
     def encrypt(self, text):
         result = ""
         for char in text:
