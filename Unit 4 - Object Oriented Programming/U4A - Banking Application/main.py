@@ -60,27 +60,30 @@ class Savings(Account):
 class BankingApplication:
     def __init__(self):
         self.main_window = tk.Tk()
-        self.init_frames()
-        self.init_labels()
-        self.init_buttons()
+        self.init_login_page()
         
         tk.mainloop()
         
-    def init_frames(self):
+    def init_login_page(self):
+        self.init_login_frames()
+        self.init_login_labels()
+        self.init_login_buttons()
+        
+    def init_login_frames(self):
         self.top_frame = tk.Frame()
         self.bottom_frame = tk.Frame()
         
         self.top_frame.pack()
         self.bottom_frame.pack()
         
-    def init_buttons(self):
+    def init_login_buttons(self):
         self.sign_up_button = tk.Button(self.bottom_frame, text="Sign Up", command=self.sign_up)
         self.login_button = tk.Button(self.bottom_frame, text="Login", command=self.login)
         
         self.sign_up_button.pack()
         self.login_button.pack()
         
-    def init_labels(self):
+    def init_login_labels(self):
         self.title = tk.Label(self.top_frame, text="Banking Application")
         self.prompt_username = tk.Label(self.top_frame, text="Enter your username: ")
         self.username_entry = tk.Entry(self.top_frame, width=15)
@@ -117,9 +120,12 @@ class BankingApplication:
         username = self.username_entry.get()
         password = self.password_entry.get()
         
-        database = open(self.encrypt(username) + ".txt", 'a')
-        database.write(self.encrypt(username + '\n'))
-        database.write(self.encrypt(password + '\n'))
+        if (username == '' or password == ''):
+            messagebox.showinfo("Error", "You cannot have a blank username or password!")
+        else:
+            database = open(self.encrypt(username) + ".txt", 'a')
+            database.write(self.encrypt(username + '\n'))
+            database.write(self.encrypt(password + '\n'))
         
     def login(self):
         username = self.username_entry.get()
