@@ -6,6 +6,7 @@ This program features a login system, banking dashboards, as well as a variety o
 """
 
 import tkinter as tk
+import datetime
 from tkinter import messagebox
 
 class Account(object):
@@ -62,6 +63,7 @@ class BankingApplication:
         self.main_window = tk.Tk()
         self.main_window.title("Banking System")
         self.main_window.geometry("600x600")
+        
         self.init_login_frames()
         self.init_login_labels()
         self.init_login_buttons()
@@ -120,12 +122,17 @@ class BankingApplication:
 
                 self.user_checking = Checking(float(stored_bal), accountnum, username)
                 self.user_savings = Savings(0 ,accountnum, username, 2.0)
+                self.user_savings = Savings(0, accountnum, username, 2.0)
                 self.show_dashboard(username)
             else:
                 messagebox.showerror("Error", "Incorrect Username or Password")
         except FileNotFoundError:
             messagebox.showerror("Error", "No users registered yet!") 
-
+            
+    def display_time(self):
+        self.current_time = datetime.datetime.now()
+        return self.current_time()
+        
     def show_dashboard(self, username):
         self.main_window.title("Banking Dashboard")
         self.main_window.geometry("400x400")
@@ -146,8 +153,10 @@ class BankingApplication:
 
     def open_savings(self):
         pass
+    
     def add_savings(self):
         pass
+    
     def open_checking(self):
         self.dash_frame.destroy()
 
@@ -174,14 +183,15 @@ class BankingApplication:
             self.balance_label.config(text="Balance: $" + new_bal)
             messagebox.showinfo("Success", "Deposited $" + str(amount))
         except ValueError:
-            messagebox.showerror("Errof", "Please enter a valid numeric amount.")
+            messagebox.showerror("Error", "Please enter a valid numeric amount.")
+        self.display_time()
 
     def withdraw_money(self):
         try:
             amount = float(self.amount_entry.get())
             current_bal = self.user_checking.get_balance()
             if amount > current_bal:
-                messagebox.showwarning("Denied", "Not enough moeny!")
+                messagebox.showwarning("Denied", "Not enough money!")
             elif amount <= 0:
                 messagebox.showwarning("Denied", "Amount must be positive!")
             else:
@@ -238,22 +248,49 @@ class BankingApplication:
         if (username == '' or password == '' or balance == ''):
             messagebox.showinfo("Error", "Everything is required")
         else:
+            
+            try: 
+                users = open("userdata.txt", 'r+')
+                lines = users.readlines()
+                if not lines[0]:
+                    users.write(str(0))
+                else:
+                    users.seek(0)
+                    lines[0] = int(lines[0]) + 1
+                    users.writelines(str(lines[0]))
+                    users.truncate()
+                users.close()
+                    
+            except FileNotFoundError:
+                users = open("userdata.txt", 'w')
+                users.writelines(str(0))
+            
             try:
+                users = open("userdata.txt", "r")
+                accountnumbers = users.readlines()
+                users.close()
+                
+                accountnum = accountnumbers[0]
                 float(balance)
                 filename = self.encrypt(username) + ".txt"
+                
                 database = open(filename, 'w')
                 database.write(self.encrypt(username) + '\n')
                 database.write(self.encrypt(password) + '\n')
                 database.write(self.encrypt(balance) +'\n')
+                database.write(accountnum + '\n')
                 database.close()
+                
                 messagebox.showinfo("Sucess", "Signed Up!")
                 self.top_frame.destroy()
                 self.bottom_frame.destroy() 
                 self.user_checking = Checking(balance, accountnum, username)
                 self.user_savings = Savings(0, accountnum, username, 2.0)
                 self.show_dashboard(username)
+                
             except ValueError:
                 messagebox.showerror("Error", "Balance must be a number")
+                
     def close(self):
         self.main_window.quit()
         self.main_window.destroy()
