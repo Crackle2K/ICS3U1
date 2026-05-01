@@ -91,7 +91,7 @@ class BankingApplication:
         self.username_entry = tk.Entry(self.top_frame, width=15)
         self.prompt_password = tk.Label(self.top_frame, text="Enter your password: ")
         self.password_entry = tk.Entry(self.top_frame, width=15)
-        self.prompt_balance = tk.Label(self.top_frame, text="Initial Deposit ($): ")
+        self.prompt_balance = tk.Label(self.top_frame, text="Initial Deposit, if signing up ($): ")
         self.balance_entry = tk.Entry(self.top_frame, width=15)
         self.title.pack()
         self.prompt_username.pack()
@@ -105,21 +105,21 @@ class BankingApplication:
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-        balance = self.balance_entry.get()
         accountnum = "INSERT"
         try: 
             database = open(self.encrypt(username) + ".txt", 'r')
             lines = database.readlines()
             database.close()
-            valid = False
             stored_username = self.decrypt(lines[0].strip())
             stored_password = self.decrypt(lines[1].strip())
             stored_bal = self.decrypt(lines[2].strip())
             if username == stored_username and password == stored_password:
+                self.current_password = password
                 self.top_frame.destroy()
                 self.bottom_frame.destroy()
+
                 self.user_checking = Checking(float(stored_bal), accountnum, username)
-                self.user_savings = Savings(0,accountnum, username, 2.0)
+                self.user_savings = Savings(0 ,accountnum, username, 2.0)
                 self.show_dashboard(username)
             else:
                 messagebox.showerror("Error", "Incorrect Username or Password")
@@ -174,7 +174,7 @@ class BankingApplication:
             self.balance_label.config(text="Balance: $" + new_bal)
             messagebox.showinfo("Success", "Deposited $" + str(amount))
         except ValueError:
-            messagebox.showerror("Error", "Please enter a valid numeric amount.")
+            messagebox.showerror("Errof", "Please enter a valid numeric amount.")
 
     def withdraw_money(self):
         try:
@@ -194,17 +194,18 @@ class BankingApplication:
 
     def back_to_dash(self):
         username = self.user_checking.get_name()
-        database = open(self.encrypt(username) + ".txt", 'w')
+        balance = str(self.user_checking.get_balance())
+        password = self.current_password
+        file = self.encrypt(username) + ".txt"
+        database = open(file, 'w')
         database.write(self.encrypt(username) + '\n')
-        database.write(self.encrypt("PASSWORD_HERE") + '\n') 
-        database.write(self.encrypt(str(self.user_checking.get_balance())) + '\n')
+        database.write(self.encrypt(password) + '\n')
+        database.write(self.encrypt(balance) + '\n')
         database.close()
 
         self.checking_frame.destroy()
-        self.show_dashboard(username)
-        self.checking_frame.destroy()
-        self.show_dashboard(self.user_checking.get_name())
-
+        self.show_dashboard(username)        
+        
     def logout(self):
         self.dash_frame.destroy()
         self.init_login_frames()
