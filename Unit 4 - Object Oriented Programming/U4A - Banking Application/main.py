@@ -116,6 +116,7 @@ class BankingApplication:
             stored_username = self.decrypt(lines[0].strip())
             stored_password = self.decrypt(lines[1].strip())
             stored_bal = self.decrypt(lines[2].strip())
+            stored_account_num = lines[3]
             if username == stored_username and password == stored_password:
                 self.current_password = password
                 self.top_frame.destroy()
@@ -124,7 +125,7 @@ class BankingApplication:
                 self.user_checking = Checking(float(stored_bal), accountnum, username)
                 self.user_savings = Savings(0 ,accountnum, username, 2.0)
                 self.user_savings = Savings(0, accountnum, username, 2.0)
-                self.show_dashboard(username)
+                self.show_dashboard(username, stored_account_num)
             else:
                 messagebox.showerror("Error", "Incorrect Username or Password")
         except FileNotFoundError:
@@ -134,7 +135,7 @@ class BankingApplication:
         self.current_time = datetime.datetime.now()
         return self.current_time()
         
-    def show_dashboard(self, username):
+    def show_dashboard(self, username, accountnum):
         self.main_window.title("Banking Dashboard")
         self.main_window.geometry("400x400")
         
@@ -148,6 +149,7 @@ class BankingApplication:
         
         tk.Label(self.dash_frame, text="Banking Dashboard").pack(pady = 10)
         tk.Label(self.dash_frame, text="Account belongs to: " + username).pack()
+        tk.Label(self.dash_frame, text="Account Number: " + accountnum).pack()
 
         self.checking = tk.Button(self.dash_frame, text = "Checking Account", width=20, command=self.open_checking)
         self.savings = tk.Button(self.dash_frame, text= "Savings Account", width=20, command=self.open_savings)
@@ -225,7 +227,7 @@ class BankingApplication:
         except ValueError:
             messagebox.showerror("Error", "Please enter a valid numeric amount.")   
 
-    def back_to_dash(self):
+    def back_to_dash(self, accountnum):
         username = self.user_checking.get_name()
         balance = str(self.user_checking.get_balance())
         password = self.current_password
@@ -237,7 +239,7 @@ class BankingApplication:
         database.close()
 
         self.checking_frame.destroy()
-        self.show_dashboard(username)        
+        self.show_dashboard(username, accountnum)        
         
     def logout(self):
         self.dash_frame.destroy()
