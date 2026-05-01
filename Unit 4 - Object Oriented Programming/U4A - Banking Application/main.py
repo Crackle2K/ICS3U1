@@ -7,6 +7,7 @@ This program features a login system, banking dashboards, as well as a variety o
 
 import tkinter as tk
 from tkinter import messagebox
+import time
 
 class Account(object):
     def __init__(self, balance, accountnum, name):
@@ -62,9 +63,7 @@ class BankingApplication:
         self.main_window = tk.Tk()
         self.main_window.title("Banking System")
         self.main_window.geometry("600x600")
-        self.init_login_frames()
-        self.init_login_labels()
-        self.init_login_buttons()
+        self.init_login_page()
         tk.mainloop()
         
     def init_login_page(self):
@@ -129,6 +128,11 @@ class BankingApplication:
     def show_dashboard(self, username):
         self.main_window.title("Banking Dashboard")
         self.main_window.geometry("400x400")
+        
+        try:
+            self.dash_frame.destroy()
+        except AttributeError:
+            pass
 
         self.dash_frame = tk.Frame(self.main_window)
         self.dash_frame.pack(padx=20, pady=20)
@@ -173,8 +177,17 @@ class BankingApplication:
             new_bal = str(self.user_checking.get_balance())
             self.balance_label.config(text="Balance: $" + new_bal)
             messagebox.showinfo("Success", "Deposited $" + str(amount))
+            username = self.user_checking.get_name()
+            balance = str(self.user_checking.get_balance())
+            password = self.current_password
+            file = self.encrypt(username) + ".txt"
+            database = open(file, 'w')
+            database.write(self.encrypt(username) + '\n')
+            database.write(self.encrypt(password) + '\n')
+            database.write(self.encrypt(balance) + '\n')
+            database.close()
         except ValueError:
-            messagebox.showerror("Errof", "Please enter a valid numeric amount.")
+            messagebox.showerror("Error", "Please enter a valid numeric amount.")
 
     def withdraw_money(self):
         try:
@@ -189,6 +202,15 @@ class BankingApplication:
                 new_bal = str(self.user_checking.get_balance())
                 self.balance_label.config(text="Balance: $" + new_bal)
                 messagebox.showinfo("Success", "Withdrew $" + str(amount))
+                username = self.user_checking.get_name()
+                balance = str(self.user_checking.get_balance())
+                password = self.current_password
+                file = self.encrypt(username) + ".txt"
+                database = open(file, 'w')
+                database.write(self.encrypt(username) + '\n')
+                database.write(self.encrypt(password) + '\n')
+                database.write(self.encrypt(balance) + '\n')
+                database.close()
         except ValueError:
             messagebox.showerror("Error", "Please enter a valid numeric amount.")   
 
@@ -235,6 +257,7 @@ class BankingApplication:
         username = self.username_entry.get()
         password = self.password_entry.get()
         balance = self.balance_entry.get()
+        accountnum = "INSERT"
         if (username == '' or password == '' or balance == ''):
             messagebox.showinfo("Error", "Everything is required")
         else:
@@ -249,7 +272,7 @@ class BankingApplication:
                 messagebox.showinfo("Sucess", "Signed Up!")
                 self.top_frame.destroy()
                 self.bottom_frame.destroy() 
-                self.user_checking = Checking(balance, accountnum, username)
+                self.user_checking = Checking(float(balance), accountnum, username)
                 self.user_savings = Savings(0, accountnum, username, 2.0)
                 self.show_dashboard(username)
             except ValueError:
