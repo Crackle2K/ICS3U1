@@ -87,6 +87,8 @@ class BankingApplication:
         
     def init_login_labels(self):
         self.title = tk.Label(self.top_frame, text="Banking Application")
+        self.full_name = tk.Label(self.top_frame, text="Enter your full name")
+        self.fullname_entry = tk.Entry(self.top_frame, width=15)
         self.prompt_username = tk.Label(self.top_frame, text="Enter your username: ")
         self.username_entry = tk.Entry(self.top_frame, width=15)
         self.prompt_password = tk.Label(self.top_frame, text="Enter your password: ")
@@ -94,6 +96,8 @@ class BankingApplication:
         self.prompt_balance = tk.Label(self.top_frame, text="Initial Deposit, if signing up ($): ")
         self.balance_entry = tk.Entry(self.top_frame, width=15)
         self.title.pack()
+        self.full_name.pack()
+        self.fullname_entry.pack()
         self.prompt_username.pack()
         self.username_entry.pack()
         self.prompt_password.pack()
@@ -105,7 +109,6 @@ class BankingApplication:
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-        accountnum = "INSERT"
         try: 
             database = open(self.encrypt(username) + ".txt", 'r')
             lines = database.readlines()
@@ -142,7 +145,7 @@ class BankingApplication:
 
         self.dash_frame = tk.Frame(self.main_window)
         self.dash_frame.pack(padx=20, pady=20)
-
+        
         tk.Label(self.dash_frame, text="Banking Dashboard").pack(pady = 10)
         tk.Label(self.dash_frame, text="Account belongs to: " + username).pack()
 
@@ -265,7 +268,6 @@ class BankingApplication:
         username = self.username_entry.get()
         password = self.password_entry.get()
         balance = self.balance_entry.get()
-        accountnum = "INSERT"
         if (username == '' or password == '' or balance == ''):
             messagebox.showinfo("Error", "Everything is required")
         else:
