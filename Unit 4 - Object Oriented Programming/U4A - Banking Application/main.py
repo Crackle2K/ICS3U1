@@ -61,11 +61,10 @@ class BankingApplication:
     def __init__(self):
         self.main_window = tk.Tk()
         self.main_window.title("Banking System")
-        self.main_window.geometry("400x400")
+        self.main_window.geometry("600x600")
         self.init_login_frames()
         self.init_login_labels()
         self.init_login_buttons()
-        
         tk.mainloop()
         
     def init_login_page(self):
@@ -83,8 +82,8 @@ class BankingApplication:
         self.sign_up_button = tk.Button(self.bottom_frame, text="Sign Up", command=self.sign_up)
         self.login_button = tk.Button(self.bottom_frame, text="Login", command=self.login)
         
-        self.sign_up_button.pack()
-        self.login_button.pack()
+        self.sign_up_button.pack(side="left")
+        self.login_button.pack(side="left")
         
     def init_login_labels(self):
         self.title = tk.Label(self.top_frame, text="Banking Application")
@@ -106,28 +105,27 @@ class BankingApplication:
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-
+        balance = self.balance_entry.get()
+        accountnum = "INSERT"
         try: 
             database = open(self.encrypt(username) + ".txt", 'r')
             lines = database.readlines()
             database.close()
             valid = False
-            for i in range(0, len(lines)):
-                stored_username = self.decrypt(lines[i].strip())
-                stored_password = self.decrypt(lines[i+1].strip())
-                
-                if username == stored_username and password == stored_password:
-                    valid = True
-                    break
-            
-            if valid:
+            stored_username = self.decrypt(lines[0].strip())
+            stored_password = self.decrypt(lines[1].strip())
+            stored_bal = self.decrypt(lines[2].strip())
+            if username == stored_username and password == stored_password:
                 self.top_frame.destroy()
                 self.bottom_frame.destroy()
+                self.user_checking = Checking(float(stored_bal), accountnum, username)
+                self.user_savings = Savings(0,accountnum, username, 2.0)
                 self.show_dashboard(username)
             else:
                 messagebox.showerror("Error", "Incorrect Username or Password")
         except FileNotFoundError:
             messagebox.showerror("Error", "No users registered yet!") 
+
     def show_dashboard(self, username):
         self.main_window.title("Banking Dashboard")
         self.main_window.geometry("400x400")
@@ -142,19 +140,76 @@ class BankingApplication:
         self.savings = tk.Button(self.dash_frame, text= "Savings Account", width=20, command=self.open_savings)
         self.button_logout = tk.Button(self.dash_frame, text="Logout", command=self.logout)
 
-        self.checking.pack(padx=10)
-        self.savings.pack(padx=20)
-        self.button_logout.pack(padx=10)
+        self.checking.pack()
+        self.savings.pack()
+        self.button_logout.pack()
 
     def open_savings(self):
         pass
-    def open_checking(self):
+    def add_savings(self):
         pass
+    def open_checking(self):
+        self.dash_frame.destroy()
+
+        self.checking_frame = tk.Frame(self.main_window)
+        self.checking_frame.pack(pady=20)
+
+        tk.Label(self.checking_frame, text="Checking Account").pack()
+        self.balance_label = tk.Label(self.checking_frame, text="Balance: " + str(self.user_checking.get_balance()))
+        self.balance_label.pack(pady=10)
+        
+        tk.Button(self.checking_frame, text="Deposit", command= self.deposit_money).pack(side='left', padx=5)
+        tk.Button(self.checking_frame, text="Withdraw", command=self.withdraw_money).pack(side='left', padx=5)
+        tk.Button(self.checking_frame, text="Transaction to savings", command=self.add_savings).pack(side='left', padx=5)
+        tk.Button(self.checking_frame, text="Back to Dashboard", command=self.back_to_dash).pack(pady=10)
+        self.prompt_amount = tk.Label(self.checking_frame, text="Enter amount: ").pack(padx=5)
+        self.amount_entry = tk.Entry(self.checking_frame, width=15)
+        self.amount_entry.pack(padx=5)
+
+    def deposit_money(self):
+        try:
+            amount = float(self.amount_entry.get())
+            self.user_checking.deposit(amount)
+            new_bal = str(self.user_checking.get_balance())
+            self.balance_label.config(text="Balance: $" + new_bal)
+            messagebox.showinfo("Success", "Deposited $" + str(amount))
+        except ValueError:
+            messagebox.showerror("Error", "Please enter a valid numeric amount.")
+
+    def withdraw_money(self):
+        try:
+            amount = float(self.amount_entry.get())
+            current_bal = self.user_checking.get_balance()
+            if amount > current_bal:
+                messagebox.showwarning("Denied", "Not enough moeny!")
+            elif amount <= 0:
+                messagebox.showwarning("Denied", "Amount must be positive!")
+            else:
+                self.user_checking.withdraw(amount)
+                new_bal = str(self.user_checking.get_balance())
+                self.balance_label.config(text="Balance: $" + new_bal)
+                messagebox.showinfo("Success", "Withdrew $" + str(amount))
+        except ValueError:
+            messagebox.showerror("Error", "Please enter a valid numeric amount.")   
+
+    def back_to_dash(self):
+        username = self.user_checking.get_name()
+        database = open(self.encrypt(username) + ".txt", 'w')
+        database.write(self.encrypt(username) + '\n')
+        database.write(self.encrypt("PASSWORD_HERE") + '\n') 
+        database.write(self.encrypt(str(self.user_checking.get_balance())) + '\n')
+        database.close()
+
+        self.checking_frame.destroy()
+        self.show_dashboard(username)
+        self.checking_frame.destroy()
+        self.show_dashboard(self.user_checking.get_name())
+
     def logout(self):
         self.dash_frame.destroy()
-        self.init_frames()
-        self.init_labels()
-        self.init_buttons()
+        self.init_login_frames()
+        self.init_login_labels()
+        self.init_login_buttons()
     def encrypt(self, text):
         result = ""
         for char in text:
@@ -178,16 +233,28 @@ class BankingApplication:
     def sign_up(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-
-        if (username == '' or password == ''):
-            messagebox.showinfo("Error", "You cannot have a blank username or password!")
+        balance = self.balance_entry.get()
+        if (username == '' or password == '' or balance == ''):
+            messagebox.showinfo("Error", "Everything is required")
         else:
-            database = open(self.encrypt(username) + ".txt", 'a')
-            database.write(self.encrypt(username + '\n'))
-            database.write(self.encrypt(password + '\n'))
-            messagebox.showinfo("Sucess", "Signed Up!")
-            self.top_frame.destroy()
-            self.bottom_frame.destroy()
-            self.show_dashboard(username)
+            try:
+                float(balance)
+                filename = self.encrypt(username) + ".txt"
+                database = open(filename, 'w')
+                database.write(self.encrypt(username) + '\n')
+                database.write(self.encrypt(password) + '\n')
+                database.write(self.encrypt(balance) +'\n')
+                database.close()
+                messagebox.showinfo("Sucess", "Signed Up!")
+                self.top_frame.destroy()
+                self.bottom_frame.destroy() 
+                self.user_checking = Checking(balance, accountnum, username)
+                self.user_savings = Savings(0, accountnum, username, 2.0)
+                self.show_dashboard(username)
+            except ValueError:
+                messagebox.showerror("Error", "Balance must be a number")
+    def close(self):
+        self.main_window.quit()
+        self.main_window.destroy()
         
 application = BankingApplication()
