@@ -175,7 +175,7 @@ class BankingApplication:
         tk.Button(self.checking_frame, text="Deposit", command= self.deposit_money).pack(side='left', padx=5)
         tk.Button(self.checking_frame, text="Withdraw", command=self.withdraw_money).pack(side='left', padx=5)
         tk.Button(self.checking_frame, text="Transaction to savings", command=self.add_savings).pack(side='left', padx=5)
-        tk.Button(self.checking_frame, text="Back to Dashboard", command=self.back_to_dash).pack(pady=10)
+        tk.Button(self.checking_frame, text="Back to Dashboard", command=self.back_to_dash()).pack(pady=10)
         self.prompt_amount = tk.Label(self.checking_frame, text="Enter amount: ").pack(padx=5)
         self.amount_entry = tk.Entry(self.checking_frame, width=15)
         self.amount_entry.pack(padx=5)
@@ -224,10 +224,11 @@ class BankingApplication:
         except ValueError:
             messagebox.showerror("Error", "Please enter a valid numeric amount.")   
 
-    def back_to_dash(self, accountnum):
+    def back_to_dash(self):
         username = self.user_checking.get_name()
         balance = str(self.user_checking.get_balance())
         password = self.current_password
+        account_num = self.user_checking.get_accountnum()
         file = self.encrypt(username) + ".txt"
         database = open(file, 'w')
         database.write(self.encrypt(username) + '\n')
@@ -236,7 +237,7 @@ class BankingApplication:
         database.close()
 
         self.checking_frame.destroy()
-        self.show_dashboard(username, accountnum)        
+        self.show_dashboard(username, account_num)        
         
     def logout(self):
         self.dash_frame.destroy()
