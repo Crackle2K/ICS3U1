@@ -84,7 +84,7 @@ class BankingApplication:
         self.logo_state = 0
         self.animate_logo()
 
-    def animate_logo(self): #will improve this later
+    def animate_logo(self): #will improve this later this was fully copied
         self.logo_canvas.delete("all")
         text_color = "#FFD700" if self.logo_state == 0 else "#228B22"
         self.logo_canvas.create_text(40, 40, text="$", font=("Arial", 36, "bold"), fill=text_color)
