@@ -8,7 +8,7 @@ This program features a login system, banking dashboards, as well as a variety o
 import tkinter as tk
 import datetime
 from tkinter import messagebox
-
+import time
 class Account(object):
     def __init__(self, balance, accountnum, name):
         self.__balance = float(balance)
@@ -61,6 +61,11 @@ class BankingApplication:
         self.main_window = tk.Tk()
         self.main_window.title("Banking System")
         self.main_window.geometry("600x650")
+        self.coin_frames = [
+            tk.PhotoImage(file=r"C:\Users\dhani\OneDrive\Documents\GitHub\ICS3U1\Unit 4 - Object Oriented Programming\U4A - Banking Application\coin1.png"), 
+            tk.PhotoImage(file=r"C:\Users\dhani\OneDrive\Documents\GitHub\ICS3U1\Unit 4 - Object Oriented Programming\U4A - Banking Application\coin2.png")
+        ]
+        self.coin_index = 0
         self.interest_job = None
         self.logo_job = None
         self.init_login_page()
@@ -77,6 +82,15 @@ class BankingApplication:
         self.bottom_frame = tk.Frame(self.main_window)
         self.top_frame.pack()
         self.bottom_frame.pack()
+
+    def flipping_coin(self):
+        current_frame = self.coin_frames[self.coin_index]
+        self.anim_label.config(image=current_frame)
+                
+        self.coin_index = (self.coin_index + 1) % 2
+                
+        self.main_window.after(200, self.flipping_coin)
+    
 
     def init_logo_animation(self):
         self.logo_canvas = tk.Canvas(self.top_frame, width=80, height=80, bg="white", highlightthickness=0)
@@ -97,6 +111,9 @@ class BankingApplication:
             self.logo_job = None 
 
     def init_login_labels(self):
+        self.anim_label = tk.Label(self.top_frame, height=60, width=60)
+        self.anim_label.place(height=60, width=60)
+        self.flipping_coin()
         self.title_label = tk.Label(self.top_frame, text="Banking Application", font=("Arial", 14, "bold"))
         self.full_name_label = tk.Label(self.top_frame, text="Full Name (sign up only):")
         self.fullname_entry = tk.Entry(self.top_frame, width=20)
