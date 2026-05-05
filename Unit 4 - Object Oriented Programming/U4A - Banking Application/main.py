@@ -374,14 +374,14 @@ class BankingApplication:
         self.schedule_interest()
 
     def schedule_interest(self):
-        self.interest_job = self.main_window.after(60000, self.update_interest)
+        self.interest_job = self.main_window.after(1000, self.update_interest)
 
     def update_interest(self):
         self.user_savings.calculate_interest()
         self.save_user_data()
         self.savings_balance_label.config(text="Balance: $" + str(round(self.user_savings.get_balance(), 2)))
         self.savings_interest_label.config(text="Total Interest Earned: $" + str(round(self.user_savings.get_interest_earned(), 2)))
-        self.interest_job = self.main_window.after(60000, self.update_interest)
+        self.interest_job = self.main_window.after(1000, self.update_interest)
 
     def cancel_interest_job(self):
         if self.interest_job is not None:
