@@ -89,7 +89,7 @@ class BankingApplication:
                 
         self.coin_index = (self.coin_index + 1) % 2
                 
-        self.main_window.after(200, self.flipping_coin)
+        self.main_window.after(500, self.flipping_coin)
     
 
     def init_logo_animation(self):
@@ -111,8 +111,9 @@ class BankingApplication:
             self.logo_job = None 
 
     def init_login_labels(self):
-        self.anim_label = tk.Label(self.top_frame, height=60, width=60)
-        self.anim_label.place(height=60, width=60)
+        self.anim_label = tk.Label(self.top_frame, height=300, width=200)
+        self.anim_label.place(height=300, width=200)
+        self.anim_label.pack(pady=10)
         self.flipping_coin()
         self.title_label = tk.Label(self.top_frame, text="Banking Application", font=("Arial", 14, "bold"))
         self.full_name_label = tk.Label(self.top_frame, text="Full Name (sign up only):")
