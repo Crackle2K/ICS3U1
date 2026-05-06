@@ -9,6 +9,7 @@ import tkinter as tk
 import datetime
 from tkinter import messagebox
 import time
+
 class Account(object):
     def __init__(self, balance, accountnum, name):
         self.__balance = float(balance)
