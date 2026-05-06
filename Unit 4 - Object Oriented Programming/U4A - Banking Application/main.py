@@ -69,7 +69,6 @@ class BankingApplication:
         ]
         self.coin_index = 0
         self.interest_job = None
-        self.logo_job = None
         self.init_login_page()
         tk.mainloop()
 
@@ -85,12 +84,14 @@ class BankingApplication:
         self.bottom_frame.pack()
 
     def flipping_coin(self):
-        current_frame = self.coin_frames[self.coin_index]
-        self.anim_label.config(image=current_frame)
-                
-        self.coin_index = (self.coin_index + 1) % 2
-                
-        self.main_window.after(500, self.flipping_coin)
+        try:
+            current_frame = self.coin_frames[self.coin_index]
+            self.anim_label.config(image=current_frame)
+                    
+            self.coin_index = (self.coin_index + 1) % 2
+            self.coin_alarm = self.main_window.after(200, self.flipping_coin)
+        except (tk.TclError, AttributeError):
+            pass
     
 
     def init_login_labels(self):
@@ -171,6 +172,10 @@ class BankingApplication:
         database.close()
 
         messagebox.showinfo("Success", "Signed up successfully!")
+        try:
+            self.main_window.after_cancel(self.coin_alarm)
+        except (AttributeError, ValueError):
+            pass 
         self.top_frame.destroy()
         self.bottom_frame.destroy()
         self.current_fullname = fullname
@@ -197,6 +202,11 @@ class BankingApplication:
             if username == stored_username and password == stored_password:
                 self.current_password = password
                 self.current_fullname = stored_fullname
+                try:
+                    self.main_window.after_cancel(self.coin_alarm)
+                except (AttributeError, ValueError):
+                    pass 
+                
                 self.top_frame.destroy()
                 self.bottom_frame.destroy()
                 self.user_checking = Checking(float(stored_checking), stored_accountnum, username)
