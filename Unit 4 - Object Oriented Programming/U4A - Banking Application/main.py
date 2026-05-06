@@ -9,6 +9,7 @@ import tkinter as tk
 import datetime
 from tkinter import messagebox
 import time
+
 class Account(object):
     def __init__(self, balance, accountnum, name):
         self.__balance = float(balance)
@@ -63,8 +64,8 @@ class BankingApplication:
         self.main_window.geometry("600x650")
         folder = __file__.replace("main.py", "")
         self.coin_frames = [
-            tk.PhotoImage(file=folder+"coin1.png"), 
-            tk.PhotoImage(file=folder+"coin2.png")
+            tk.PhotoImage(file=folder+"coin1.png").subsample(3,3), 
+            tk.PhotoImage(file=folder+"coin2.png").subsample(3,3)
         ]
         self.coin_index = 0
         self.interest_job = None
@@ -74,7 +75,6 @@ class BankingApplication:
 
     def init_login_page(self):
         self.init_login_frames()
-        self.init_logo_animation()
         self.init_login_labels()
         self.init_login_buttons()
 
@@ -93,28 +93,10 @@ class BankingApplication:
         self.main_window.after(500, self.flipping_coin)
     
 
-    def init_logo_animation(self):
-        self.logo_canvas = tk.Canvas(self.top_frame, width=80, height=80, bg="white", highlightthickness=0)
-        self.logo_canvas.pack(pady=5)
-        self.logo_state = 0
-        self.animate_logo()
-
-    def animate_logo(self): #will improve this later this was fully copied
-        self.logo_canvas.delete("all")
-        text_color = "#FFD700" if self.logo_state == 0 else "#228B22"
-        self.logo_canvas.create_text(40, 40, text="$", font=("Arial", 36, "bold"), fill=text_color)
-        self.logo_state = (self.logo_state + 1) % 2
-        self.logo_job = self.main_window.after(500, self.animate_logo)
-
-    def cancel_logo_animation(self):
-        if self.logo_job is not None:
-            self.main_window.after_cancel(self.logo_job) #MUST fix this later
-            self.logo_job = None 
-
     def init_login_labels(self):
         self.anim_label = tk.Label(self.top_frame, height=300, width=200)
         self.anim_label.place(height=300, width=200)
-        self.anim_label.pack(pady=10)
+        self.anim_label.pack(pady=5)
         self.flipping_coin()
         self.title_label = tk.Label(self.top_frame, text="Banking Application", font=("Arial", 14, "bold"))
         self.full_name_label = tk.Label(self.top_frame, text="Full Name (sign up only):")
@@ -189,7 +171,6 @@ class BankingApplication:
         database.close()
 
         messagebox.showinfo("Success", "Signed up successfully!")
-        self.cancel_logo_animation()
         self.top_frame.destroy()
         self.bottom_frame.destroy()
         self.current_fullname = fullname
@@ -216,7 +197,6 @@ class BankingApplication:
             if username == stored_username and password == stored_password:
                 self.current_password = password
                 self.current_fullname = stored_fullname
-                self.cancel_logo_animation()
                 self.top_frame.destroy()
                 self.bottom_frame.destroy()
                 self.user_checking = Checking(float(stored_checking), stored_accountnum, username)
@@ -233,11 +213,6 @@ class BankingApplication:
     def show_dashboard(self, username, accountnum):
         self.main_window.title("Banking Dashboard")
         self.main_window.geometry("400x400")
-
-        try:
-            self.dash_frame.destroy()
-        except AttributeError:
-            pass
 
         self.dash_frame = tk.Frame(self.main_window)
         self.dash_frame.pack(padx=20, pady=20)
@@ -465,13 +440,11 @@ class BankingApplication:
         self.dash_frame.destroy()
         self.main_window.geometry("600x650")
         self.init_login_frames()
-        self.init_logo_animation()
         self.init_login_labels()
         self.init_login_buttons()
 
     def close(self):
         self.cancel_interest_job()
-        self.cancel_logo_animation()
         self.main_window.quit()
         self.main_window.destroy()
 
