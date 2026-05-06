@@ -61,9 +61,10 @@ class BankingApplication:
         self.main_window = tk.Tk()
         self.main_window.title("Banking System")
         self.main_window.geometry("600x650")
+        folder = __file__.replace("main.py", "")
         self.coin_frames = [
-            tk.PhotoImage(file=r"C:\Users\dhani\OneDrive\Documents\GitHub\ICS3U1\Unit 4 - Object Oriented Programming\U4A - Banking Application\coin1.png"), 
-            tk.PhotoImage(file=r"C:\Users\dhani\OneDrive\Documents\GitHub\ICS3U1\Unit 4 - Object Oriented Programming\U4A - Banking Application\coin2.png")
+            tk.PhotoImage(file=folder+"coin1.png"), 
+            tk.PhotoImage(file=folder+"coin2.png")
         ]
         self.coin_index = 0
         self.interest_job = None
