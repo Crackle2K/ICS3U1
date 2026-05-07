@@ -8,7 +8,6 @@ This program features a login system, banking dashboards, as well as a variety o
 import tkinter as tk
 import datetime
 from tkinter import messagebox
-import time
 
 class Account(object):
     def __init__(self, balance, accountnum, name):
@@ -121,7 +120,7 @@ class BankingApplication:
             self.anim_label.config(image=current_frame)
                     
             self.coin_index = (self.coin_index + 1) % 2
-            self.coin_alarm = self.main_window.after(200, self.flipping_coin)
+            self.coin_alarm = self.main_window.after(500, self.flipping_coin)
         except (tk.TclError, AttributeError):
             pass
     
