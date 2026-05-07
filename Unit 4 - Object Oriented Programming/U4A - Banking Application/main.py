@@ -12,53 +12,79 @@ import time
 
 class Account(object):
     def __init__(self, balance, accountnum, name):
+        """Initialize an account with a balance, account number, and owner name."""
+        
         self.__balance = float(balance)
         self.__accountnum = accountnum
         self.__name = name
-        
+
     def get_balance(self):
-        return self.__balance
-    
-    def set_balance(self, new_balance):
-        self.__balance = new_balance
+        """Return the current account balance."""
         
+        return self.__balance
+
+    def set_balance(self, new_balance):
+        """Set the account balance to new_balance."""
+        
+        self.__balance = new_balance
+
     def get_accountnum(self):
+        """Return the account number."""
+        
         return self.__accountnum
-    
+
     def get_name(self):
+        """Return the account owner's username."""
+        
         return self.__name
 
 class Checking(Account):
     def __init__(self, balance, accountnum, name):
+        """Initialize a checking account."""
+        
         Account.__init__(self, balance, accountnum, name)
 
     def deposit(self, amount):
+        """Add amount to the checking balance if amount is positive."""
+        
         if amount > 0:
             self.set_balance(self.get_balance() + amount)
 
     def withdraw(self, amount):
+        """Subtract amount from the checking balance if funds are sufficient."""
+        
         if 0 < amount <= self.get_balance():
             self.set_balance(self.get_balance() - amount)
 
 class Savings(Account):
     def __init__(self, balance, accountnum, name, interest_rate):
+        """Initialize a savings account with a given interest rate (as a percentage)."""
+        
         Account.__init__(self, balance, accountnum, name)
         self.__interest_rate = interest_rate / 100
         self.__interest_earned = 0.0
 
     def get_interest_rate(self):
+        """Return the interest rate as a decimal."""
+        
         return self.__interest_rate
 
     def get_interest_earned(self):
+        """Return the total interest earned so far."""
+        
         return self.__interest_earned
 
     def calculate_interest(self):
+        """Apply one period of interest to the balance and accumulate interest earned."""
+        
         interest = self.get_balance() * self.__interest_rate
         self.set_balance(self.get_balance() + interest)
         self.__interest_earned += interest
 
 class BankingApplication:
     def __init__(self):
+        """Set up the main window, load assets, and launch the login page."""
+        
         self.main_window = tk.Tk()
         self.main_window.title("Banking System")
         self.main_window.geometry("600x650")
@@ -73,17 +99,23 @@ class BankingApplication:
         tk.mainloop()
 
     def init_login_page(self):
+        """Build the full login page by initializing its frames, labels, and buttons."""
+        
         self.init_login_frames()
         self.init_login_labels()
         self.init_login_buttons()
 
     def init_login_frames(self):
+        """Create and pack the top and bottom frames for the login page."""
+        
         self.top_frame = tk.Frame(self.main_window)
         self.bottom_frame = tk.Frame(self.main_window)
         self.top_frame.pack()
         self.bottom_frame.pack()
 
     def flipping_coin(self):
+        """Animate the coin by alternating between frames every 200 ms."""
+        
         try:
             current_frame = self.coin_frames[self.coin_index]
             self.anim_label.config(image=current_frame)
@@ -95,6 +127,8 @@ class BankingApplication:
     
 
     def init_login_labels(self):
+        """Create and pack all labels and entry fields on the login page."""
+        
         self.anim_label = tk.Label(self.top_frame, height=300, width=200)
         self.anim_label.place(height=300, width=200)
         self.anim_label.pack(pady=5)
@@ -120,12 +154,16 @@ class BankingApplication:
         self.balance_entry.pack()
 
     def init_login_buttons(self):
+        """Create and pack the Sign Up and Login buttons on the login page."""
+        
         self.sign_up_button = tk.Button(self.bottom_frame, text="Sign Up", width=12, command=self.sign_up)
         self.login_button = tk.Button(self.bottom_frame, text="Login", width=12, command=self.login)
         self.sign_up_button.pack(side="left", padx=5, pady=10)
         self.login_button.pack(side="left", padx=5, pady=10)
 
     def sign_up(self):
+        """Validate sign-up fields, create an account file, and navigate to the dashboard."""
+        
         fullname = self.fullname_entry.get().strip()
         username = self.username_entry.get().strip()
         password = self.password_entry.get()
@@ -185,6 +223,8 @@ class BankingApplication:
         self.show_dashboard(username, accountnum)
 
     def login(self):
+        """Verify credentials against the stored user file and open the dashboard on success."""
+        
         username = self.username_entry.get().strip()
         password = self.password_entry.get()
         try:
@@ -221,6 +261,8 @@ class BankingApplication:
             messagebox.showerror("Error", "User data is corrupted. Please sign up again.")
 
     def show_dashboard(self, username, accountnum):
+        """Display the main banking dashboard with account info and navigation buttons."""
+        
         self.main_window.title("Banking Dashboard")
         self.main_window.geometry("400x400")
 
@@ -240,6 +282,8 @@ class BankingApplication:
         tk.Button(self.dash_frame, text="Exit", width=20, command=self.close).pack(pady=3)
 
     def change_password(self):
+        """Show the change-password form, replacing the dashboard."""
+        
         self.dash_frame.destroy()
         self.change_pass_frame = tk.Frame(self.main_window)
         self.change_pass_frame.pack(padx=20, pady=20)
@@ -259,6 +303,8 @@ class BankingApplication:
         tk.Button(self.change_pass_frame, text="Back", command=self.back_from_change_pass).pack()
 
     def confirm_change_password(self):
+        """Validate the entered passwords and save the new password if they are correct."""
+        
         old = self.old_pass_entry.get()
         new = self.new_pass_entry.get()
         confirm = self.confirm_pass_entry.get()
@@ -276,10 +322,14 @@ class BankingApplication:
             self.back_from_change_pass()
 
     def back_from_change_pass(self):
+        """Destroy the change-password frame and return to the dashboard."""
+        
         self.change_pass_frame.destroy()
         self.show_dashboard(self.user_checking.get_name(), self.user_checking.get_accountnum())
 
     def open_checking(self):
+        """Show the checking account screen with balance, deposit, withdraw, and transfer options."""
+        
         self.dash_frame.destroy()
         self.checking_frame = tk.Frame(self.main_window)
         self.checking_frame.pack(pady=20)
@@ -303,6 +353,8 @@ class BankingApplication:
         tk.Button(self.checking_frame, text="Exit", command=self.close).pack()
 
     def deposit_money(self):
+        """Deposit the entered amount into the checking account and refresh the balance label."""
+        
         try:
             amount = float(self.amount_entry.get())
             if amount <= 0:
@@ -316,6 +368,8 @@ class BankingApplication:
             messagebox.showerror("Error", "Please enter a valid numeric amount.")
 
     def withdraw_money(self):
+        """Withdraw the entered amount from the checking account if funds are sufficient."""
+        
         try:
             amount = float(self.amount_entry.get())
             if amount <= 0:
@@ -331,6 +385,8 @@ class BankingApplication:
             messagebox.showerror("Error", "Please enter a valid numeric amount.")
 
     def add_savings(self):
+        """Transfer the entered amount from the checking account to savings."""
+        
         try:
             amount = float(self.amount_entry.get())
             if amount <= 0:
@@ -347,11 +403,15 @@ class BankingApplication:
             messagebox.showerror("Error", "Please enter a valid numeric amount.")
 
     def back_to_dash(self):
+        """Save data, destroy the checking frame, and return to the dashboard."""
+        
         self.save_user_data()
         self.checking_frame.destroy()
         self.show_dashboard(self.user_checking.get_name(), self.user_checking.get_accountnum())
 
     def open_savings(self):
+        """Show the savings account screen and start the recurring interest updates."""
+        
         self.dash_frame.destroy()
         self.cancel_interest_job()
 
@@ -378,9 +438,13 @@ class BankingApplication:
         self.schedule_interest()
 
     def schedule_interest(self):
+        """Schedule the next interest update to run after 1 second."""
+        
         self.interest_job = self.main_window.after(1000, self.update_interest)
 
     def update_interest(self):
+        """Apply interest, save data, refresh labels, and reschedule the next update."""
+        
         self.user_savings.calculate_interest()
         self.save_user_data()
         self.savings_balance_label.config(text="Balance: $" + str(round(self.user_savings.get_balance(), 2)))
@@ -388,11 +452,15 @@ class BankingApplication:
         self.interest_job = self.main_window.after(1000, self.update_interest)
 
     def cancel_interest_job(self):
+        """Cancel the pending interest update job if one is scheduled."""
+        
         if self.interest_job is not None:
             self.main_window.after_cancel(self.interest_job)
             self.interest_job = None
 
     def transfer_to_checking(self):
+        """Transfer the entered amount from savings to the checking account."""
+        
         try:
             amount = float(self.savings_transfer_entry.get())
             if amount <= 0:
@@ -409,11 +477,15 @@ class BankingApplication:
             messagebox.showerror("Error", "Please enter a valid numeric amount.")
 
     def back_from_savings(self):
+        """Cancel interest updates, destroy the savings frame, and return to the dashboard."""
+        
         self.cancel_interest_job()
         self.savings_frame.destroy()
         self.show_dashboard(self.user_checking.get_name(), self.user_checking.get_accountnum())
 
     def save_user_data(self):
+        """Write the current user's account data to their encrypted file."""
+        
         username = self.user_checking.get_name()
         filename = self.encrypt(username) + ".txt"
         database = open(filename, 'w')
@@ -426,6 +498,8 @@ class BankingApplication:
         database.close()
 
     def encrypt(self, text):
+        """Caesar-cipher encode text by shifting each letter forward by 3."""
+        
         result = ""
         for char in text:
             if char.isalpha():
@@ -436,6 +510,8 @@ class BankingApplication:
         return result
 
     def decrypt(self, text):
+        """Caesar-cipher decode text by shifting each letter back by 3."""
+        
         result = ""
         for char in text:
             if char.isalpha():
@@ -446,6 +522,8 @@ class BankingApplication:
         return result
 
     def logout(self):
+        """Log out the current user and return to the login page."""
+        
         self.cancel_interest_job()
         self.dash_frame.destroy()
         self.main_window.geometry("600x650")
@@ -454,6 +532,8 @@ class BankingApplication:
         self.init_login_buttons()
 
     def close(self):
+        """Cancel any pending jobs and close the application window."""
+        
         self.cancel_interest_job()
         self.main_window.quit()
         self.main_window.destroy()
