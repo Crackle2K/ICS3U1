@@ -8,7 +8,6 @@ import os
 import random
 import pygame
 
-
 class Circle(pygame.sprite.Sprite):
     def __init__(self, color):
         pygame.sprite.Sprite.__init__(self)
