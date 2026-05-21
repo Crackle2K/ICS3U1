@@ -13,6 +13,7 @@ class Main:
         pygame.display.set_caption("Memory Game v1.0.0")
 
         self.__entities()
+        self.__load_music()
 
         self.__loop()
         
@@ -24,6 +25,14 @@ class Main:
         self.background.fill((10, 10, 40))
         self.screen.blit(self.background, (0, 0))
         
+    def __load_music(self):
+        """Load and loop background music if a file is present"""
+        try:
+            pygame.mixer.music.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\sounds\aria_math.ogg")
+            pygame.mixer.music.play(-1)
+        except:
+            pass
+    
     def __loop(self):
         clock = pygame.time.Clock()
         self.__keep_going = True
