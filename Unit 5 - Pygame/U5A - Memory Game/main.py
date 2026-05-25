@@ -11,6 +11,9 @@ class Main:
         pygame.init()
         self.screen = pygame.display.set_mode((640, 480))
         pygame.display.set_caption("Memory Game v1.0.0")
+        cursor_image = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\cursor.png")
+        cursor_image = pygame.transform.scale(cursor_image, (24, 24))
+        pygame.mouse.set_cursor(pygame.Cursor((0, 0), cursor_image))
         self.__flipped_cards = []
         self.__waiting = False
         self.__moves = 0
@@ -151,6 +154,7 @@ class Tile(pygame.sprite.Sprite):
 
         raw_back = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\back.png").convert_alpha()
         self.image = pygame.transform.scale(raw_back, (100, 100))
+        
 
         self.rect = self.image.get_rect()
         self.rect.left = x
