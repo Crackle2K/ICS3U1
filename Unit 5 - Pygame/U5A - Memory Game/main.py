@@ -121,8 +121,8 @@ class Main:
         elapsed = self.__get_elapsed()
         moves_surf = self.__font.render(f"Moves: {self.__moves}", True, (255, 255, 255))
         time_surf = self.__font.render(f"Time: {elapsed}s", True, (255, 255, 255))
-        self.screen.blit(moves_surf, (440, 180))
-        self.screen.blit(time_surf, (440, 215))
+        self.screen.blit(moves_surf, (540, 180))
+        self.screen.blit(time_surf, (540, 225))
 
         if self.__game_won:
             self.__draw_win_screen(elapsed)
