@@ -31,7 +31,7 @@ class Main:
 
         self.__font = pygame.font.SysFont("Arial", 22)
 
-        image_list = ["person.png", "ocean.png", "beach.png", "diver.png", "cave.png", "shark.png"]
+        image_list = ["person.png", "ocean.png", "beach.png", "diver.png", "cave.png", "shark.png", "jellyfish.png", "pearl.png"]
         tiles = image_list * 2
         random.shuffle(tiles)
 
