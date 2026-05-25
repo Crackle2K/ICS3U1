@@ -9,7 +9,7 @@ import pygame, random
 class Main:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((640, 480))
+        self.screen = pygame.display.set_mode((680, 480))
         pygame.display.set_caption("Memory Game v1.0.0")
         cursor_image = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\cursor.png")
         cursor_image = pygame.transform.scale(cursor_image, (24, 24))
@@ -20,6 +20,8 @@ class Main:
         self.__timer_start = None
         self.__win_time = None
         self.__game_won = False
+        self.__game_lost = False
+        self.__time_limit = 45
 
         self.__entities()
         self.__load_music()
@@ -75,7 +77,7 @@ class Main:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.__keep_going = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and not self.__waiting and not self.__game_won:
+            elif event.type == pygame.MOUSEBUTTONDOWN and not self.__waiting and not self.__game_won and not self.__game_lost:
                 for tile in self.all_tiles:
                     if tile.rect.collidepoint(event.pos) and not tile.is_flip:
                         if self.__timer_start is None:
@@ -102,6 +104,10 @@ class Main:
             self.__win_time = pygame.time.get_ticks()
 
     def __update(self):
+        
+        if not self.__game_won and not self.__game_lost and self.__get_elapsed == 0:
+            self.__game_lost = True
+        
         if self.__waiting:
             current_time = pygame.time.get_ticks()
             if current_time - self.__wait_timer > 1000:
@@ -112,23 +118,31 @@ class Main:
 
     def __get_elapsed(self):
         if self.__timer_start is None:
-            return 0
+            return self.__time_limit
         if self.__game_won:
-            return (self.__win_time - self.__timer_start) // 1000
-        return (pygame.time.get_ticks() - self.__timer_start) // 1000
-
+            elapsed = (self.__win_time - self.__timer_start) // 1000
+        else:
+            elapsed = (pygame.time.get_ticks() - self.__timer_start) // 1000
+            
+        remaining_time = self.__time_limit - elapsed
+        return max(0, remaining_time)
+    
     def __refresh(self):
         self.screen.blit(self.background, (0, 0))
         self.all_tiles.draw(self.screen)
 
         elapsed = self.__get_elapsed()
         moves_surf = self.__font.render(f"Moves: {self.__moves}", True, (255, 255, 255))
-        time_surf = self.__font.render(f"Time: {elapsed}s", True, (255, 255, 255))
-        self.screen.blit(moves_surf, (540, 180))
-        self.screen.blit(time_surf, (540, 225))
+        
+        time_surf = self.__font.render(f"Remaining: {elapsed}s", True, (255, 255, 255))
+        
+        self.screen.blit(moves_surf, (530, 180))
+        self.screen.blit(time_surf, (530, 225))
 
         if self.__game_won:
             self.__draw_win_screen(elapsed)
+        elif self.__game_lost:
+            self.__draw_lose_screen()
 
         pygame.display.flip()
 
@@ -142,6 +156,18 @@ class Main:
         stats_surf = self.__font.render(f"Moves: {self.__moves}   Time: {elapsed}s", True, (255, 255, 255))
 
         self.screen.blit(win_surf, win_surf.get_rect(center=(320, 210)))
+        self.screen.blit(stats_surf, stats_surf.get_rect(center=(320, 270)))
+        
+    def __draw_lose_screen(self):
+        overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 160))
+        self.screen.blit(overlay, (0, 0))
+
+        big_font = pygame.font.SysFont("Arial", 48)
+        lose_surf = big_font.render("Game Over!", True, (220, 20, 60))
+        stats_surf = self.__font.render("You ran out of time.", True, (255, 255, 255))
+
+        self.screen.blit(lose_surf, lose_surf.get_rect(center=(320, 210)))
         self.screen.blit(stats_surf, stats_surf.get_rect(center=(320, 270)))
 
 
