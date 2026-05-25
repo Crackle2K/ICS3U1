@@ -149,7 +149,7 @@ class Tile(pygame.sprite.Sprite):
         self.face_up_img = face_up
         self.is_flip = False
 
-        raw_back = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\title.png").convert_alpha()
+        raw_back = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\back.png").convert_alpha()
         self.image = pygame.transform.scale(raw_back, (100, 100))
 
         self.rect = self.image.get_rect()
@@ -163,7 +163,7 @@ class Tile(pygame.sprite.Sprite):
             raw_front = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\\" + self.face_up_img).convert_alpha()
             self.image = pygame.transform.scale(raw_front, (100, 100))
         else:
-            raw_back = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\title.png").convert_alpha()
+            raw_back = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\back.png").convert_alpha()
             self.image = pygame.transform.scale(raw_back, (100, 100))
 
 Main()
