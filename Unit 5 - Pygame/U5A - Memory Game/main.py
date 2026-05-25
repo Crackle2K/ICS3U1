@@ -41,9 +41,9 @@ class Main:
         idx = 0
 
         for row in range(4):
-            for col in range(3):
+            for col in range(4):
                 x = 100 + col * (tilesize + margin)
-                y = 40 + row * (tilesize + margin)
+                y = 20 + row * (tilesize + margin)
                 new_tile = Tile(tiles[idx], x, y)
                 self.all_tiles.add(new_tile)
                 idx += 1
