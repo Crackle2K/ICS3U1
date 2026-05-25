@@ -31,7 +31,7 @@ class Main:
 
         self.__font = pygame.font.SysFont("Arial", 22)
 
-        image_list = ["person1.png", "ocean.png", "beach.png", "person2.png", "cave.png", "shark.png"]
+        image_list = ["person.png", "ocean.png", "beach.png", "diver.png", "cave.png", "shark.png"]
         tiles = image_list * 2
         random.shuffle(tiles)
 
@@ -149,7 +149,7 @@ class Tile(pygame.sprite.Sprite):
         self.face_up_img = face_up
         self.is_flip = False
 
-        raw_back = pygame.image.load("put the image here").convert_alpha()
+        raw_back = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\title.png").convert_alpha()
         self.image = pygame.transform.scale(raw_back, (100, 100))
 
         self.rect = self.image.get_rect()
@@ -160,10 +160,10 @@ class Tile(pygame.sprite.Sprite):
         self.is_flip = not self.is_flip
 
         if self.is_flip:
-            raw_front = pygame.image.load("img\\" + self.face_up_img).convert_alpha()
+            raw_front = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\\" + self.face_up_img).convert_alpha()
             self.image = pygame.transform.scale(raw_front, (100, 100))
         else:
-            raw_back = pygame.image.load("img\\back.png").convert_alpha()
+            raw_back = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\title.png").convert_alpha()
             self.image = pygame.transform.scale(raw_back, (100, 100))
 
 Main()
