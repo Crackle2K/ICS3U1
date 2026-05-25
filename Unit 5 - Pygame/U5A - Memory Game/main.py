@@ -12,7 +12,7 @@ class Main:
         self.screen = pygame.display.set_mode((640, 480))
         pygame.display.set_caption("Memory Game v1.0.0")
         cursor_image = pygame.image.load(r"Unit 5 - Pygame\U5A - Memory Game\assets\images\cursor.png")
-        cursor_image = pygame.transform.scale(cursor_image, (24, 24))
+        cursor_image = pygame.transform.scale(cursor_image, (40, 40))
         pygame.mouse.set_cursor(pygame.Cursor((0, 0), cursor_image))
         self.__flipped_cards = []
         self.__waiting = False
