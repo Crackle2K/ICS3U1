@@ -72,15 +72,11 @@ class Main:
         play_rect.bottomright = (662, 462)
 
         bubbles = [Bubble() for _ in range(24)]
-        title_font = pygame.font.SysFont("Arial", 60, bold=True)
-        sub_font = pygame.font.SysFont("Arial", 17)
         head_font = pygame.font.SysFont("Arial", 19, bold=True)
         body_font = pygame.font.SysFont("Arial", 15)
 
-        t = 0
         while True:
             clock.tick(30)
-            t += 1
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -97,59 +93,8 @@ class Main:
                 b.update()
                 b.draw(self.screen)
 
-            bob = int(math.sin(t * 0.06) * 7)
-            shadow_surf = title_font.render("Ocean Blitz", True, (0, 50, 90))
-            title_surf = title_font.render("Ocean Blitz", True, (0, 200, 255))
-            self.screen.blit(shadow_surf, shadow_surf.get_rect(center=(342, 63 + bob)))
-            self.screen.blit(title_surf, title_surf.get_rect(center=(340, 61 + bob)))
-
-            sub_surf = sub_font.render("A deep-sea memory challenge", True, (100, 170, 215))
-            self.screen.blit(sub_surf, sub_surf.get_rect(center=(340, 107)))
-
-            pygame.draw.line(self.screen, (0, 70, 130), (55, 122), (625, 122), 1)
-
-            lx, rx = 58, 362
-            yh = 134
-
-            how_surf = head_font.render("How to Play", True, (0, 200, 255))
-            self.screen.blit(how_surf, (lx, yh))
-
-            how_lines = [
-                "Flip cards to reveal hidden images.",
-                "Find all 8 matching pairs of cards",
-                "before the 45-second timer runs out.",
-                "",
-                "Three pairs are special — matching",
-                "them triggers a unique bonus effect!",
-                "",
-                "Use the Shuffle button to mix cards",
-                "(resets all progress). Hit Replay to",
-                "start a brand new game at any time.",
-            ]
-            ly = yh + 26
-            for line in how_lines:
-                s = body_font.render(line, True, (190, 215, 235))
-                self.screen.blit(s, (lx + 4, ly))
-                ly += 18
-
-            ctrl_surf = head_font.render("Controls", True, (0, 200, 255))
-            self.screen.blit(ctrl_surf, (rx, yh))
-
-            ctrl_lines = [
-                ("Left Click", "Flip a card / press a button"),
-                ("Shuffle", "Shuffle all cards"),
-                ("Replay", "Start a new game"),
-                ("ESC", "Quit"),
-            ]
-            ry = yh + 26
-            for key, desc in ctrl_lines:
-                ks = body_font.render(key + ":", True, (255, 215, 0))
-                ds = body_font.render(desc, True, (190, 215, 235))
-                self.screen.blit(ks, (rx + 4, ry))
-                self.screen.blit(ds, (rx + 4 + ks.get_width() + 5, ry))
-                ry += 20
-
-            ry += 10
+            rx = 362
+            ry = 134
             sp_surf = head_font.render("Special Cards", True, (0, 200, 255))
             self.screen.blit(sp_surf, (rx, ry))
             ry += 24
