@@ -2,6 +2,7 @@
 Authors: Dinesh Sinnathamby, Dhani Shah
 Date: May 21st, 2026
 Description: Complex memory game built in Pygame, featuring original sprites, opening screens, and scoring.
+Some special cards will temporarily reveal the board, or shuffle all the cards, or give you 500 bonus points. 
 """
 
 import pygame, random, math, os
