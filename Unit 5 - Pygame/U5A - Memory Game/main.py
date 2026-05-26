@@ -48,8 +48,8 @@ class Main:
         pygame.mouse.set_cursor(pygame.Cursor((0, 0), cursor_image))
 
         self.__time_limit = 45
-        self.__shuffle_button_rect = pygame.Rect(520, 285, 130, 35)
-        self.__replay_button_rect = pygame.Rect(520, 335, 130, 35)
+        self.__shuffle_button_rect = pygame.Rect(550, 285, 130, 35)
+        self.__replay_button_rect = pygame.Rect(550, 335, 130, 35)
         self.__font = pygame.font.SysFont("Arial", 22)
         self.__small_font = pygame.font.SysFont("Arial", 13)
 
@@ -338,8 +338,8 @@ class Main:
         elapsed = self.__get_elapsed()
         moves_surf = self.__font.render(f"Moves: {self.__moves}", True, (255, 255, 255))
         time_surf = self.__font.render(f"Remaining: {elapsed}s", True, (255, 255, 255))
-        self.screen.blit(moves_surf, (530, 180))
-        self.screen.blit(time_surf, (530, 225))
+        self.screen.blit(moves_surf, (560, 180))
+        self.screen.blit(time_surf, (560, 225))
 
         if self.__notification:
             text, color, expire = self.__notification
@@ -355,9 +355,18 @@ class Main:
             lbl = self.__small_font.render(stype.capitalize(), True, (200, 200, 200))
             self.screen.blit(lbl, (538, legend_y))
             legend_y += 18
+            
+        self.__color_refresh()
 
+    
+    def __color_refresh(self):
+        elapsed = self.__get_elapsed()
         mouse_pos = pygame.mouse.get_pos()
-        shuf_color = (60, 130, 200) if self.__shuffle_button_rect.collidepoint(mouse_pos) else (40, 90, 160)
+        if self.__shuffle_button_rect.collidepoint(mouse_pos):
+            shuf_color = (60, 130, 200)
+        else:
+            shuf_color = (40, 90, 160)
+            
         pygame.draw.rect(self.screen, shuf_color, self.__shuffle_button_rect, border_radius=6)
         shuf_txt = self.__font.render("Shuffle", True, (255, 255, 255))
         self.screen.blit(shuf_txt, shuf_txt.get_rect(center=self.__shuffle_button_rect.center))
