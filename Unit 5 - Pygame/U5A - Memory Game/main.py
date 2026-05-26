@@ -17,20 +17,24 @@ SPECIAL_COLORS = {
 
 class Bubble:
     def __init__(self):
+        """Initialize a Bubble animation with a random initial position and speed."""
         self.__spawn(anywhere=True)
 
     def __spawn(self, anywhere=False):
+        """Spawn or reset a bubble with a random position, radius, and speed."""
         self.x = random.randint(0, 680)
         self.y = random.randint(0, 480) if anywhere else 492
         self.r = random.randint(3, 12)
         self.speed = random.uniform(0.4, 1.8)
 
     def update(self):
+        """Update the bubble's vertical position and reset it if it moves off-screen."""
         self.y -= self.speed
         if self.y < -self.r:
             self.__spawn()
 
     def draw(self, surface):
+        """Draw the bubble and its inner highlight onto the surface."""
         pygame.draw.circle(surface, (50, 120, 200), (int(self.x), int(self.y)), self.r, 1)
         if self.r >= 6:
             hx = int(self.x) - self.r // 3
@@ -420,6 +424,7 @@ class Main:
         pygame.display.flip()
 
     def __draw_win_screen(self, elapsed):
+        """Draw win screen with score and time(calculated by 45 - elapsed time)"""
         overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 160))
         self.screen.blit(overlay, (0, 0))
@@ -435,6 +440,7 @@ class Main:
         self.screen.blit(score_surf, score_surf.get_rect(center=(320, 300)))
 
     def __draw_lose_screen(self):
+        """Draw lose screen if time limit is exceeds"""
         overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 160))
         self.screen.blit(overlay, (0, 0))
@@ -448,6 +454,7 @@ class Main:
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, face_up, special, x, y):
+        """Initialize an individual game Tile sprite, face_up:image loaded when flipped face-up, and x,y coordinates of the tile"""
         pygame.sprite.Sprite.__init__(self)
         self.face_up_img = face_up
         self.special = special
@@ -460,6 +467,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect.top = y
 
     def __make_back(self):
+        """Create the generic face-down back image surface for a tile, applying colored borders for special tiles."""
         raw = pygame.image.load(os.path.join(_DIR, "assets", "images", "back.png")).convert_alpha()
         surf = pygame.transform.scale(raw, (100, 100))
         if self.special:
@@ -468,6 +476,7 @@ class Tile(pygame.sprite.Sprite):
         return surf
 
     def flip(self):
+        """Change tile's orientation between face-up and face-down, loading and adjusting the corresponding sprite assets."""
         self.is_flip = not self.is_flip
         if self.is_flip:
             raw = pygame.image.load(os.path.join(_DIR, "assets", "images", self.face_up_img)).convert_alpha()
