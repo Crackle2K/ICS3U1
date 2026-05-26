@@ -22,6 +22,7 @@ class Main:
         self.__game_won = False
         self.__game_lost = False
         self.__time_limit = 45
+        self.__score = 0
 
         self.__entities()
         self.__load_music()
@@ -116,7 +117,14 @@ class Main:
             self.__win_time = pygame.time.get_ticks()
             pygame.mixer.music.stop()
             self.__snd_win.play()
-
+            elapsed = (self.__win_time - self.__timer_start)//1000
+            remaining_time = max(0, self.__time_limit - elapsed)
+            
+            extra_moves = max(0, self.__moves - 8)
+            accuracy_score = max(0, 10000 - (extra_moves * 250))
+            time_bonus = remaining_time * 100
+            
+            self.__score = accuracy_score + time_bonus
     def __update(self):
         
         if not self.__game_won and not self.__game_lost and self.__get_elapsed == 0:
@@ -168,10 +176,10 @@ class Main:
         big_font = pygame.font.SysFont("Arial", 48)
         win_surf = big_font.render("You Win!", True, (255, 215, 0))
         stats_surf = self.__font.render(f"Moves: {self.__moves}   Time: {elapsed}s", True, (255, 255, 255))
-
+        score_surf = big_font.render(f"Score: {self.__score}", True, (0, 255, 128))
         self.screen.blit(win_surf, win_surf.get_rect(center=(320, 210)))
         self.screen.blit(stats_surf, stats_surf.get_rect(center=(320, 270)))
-        
+        self.screen.blit(score_surf, score_surf.get_rect(center=(320, 300)))
     def __draw_lose_screen(self):
         overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 160))
