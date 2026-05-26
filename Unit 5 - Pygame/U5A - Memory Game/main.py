@@ -25,6 +25,8 @@ class Main:
 
         self.__entities()
         self.__load_music()
+        self.__load_sound_effects()
+
         self.__loop()
 
         pygame.quit()
@@ -69,7 +71,14 @@ class Main:
             self.__handle_events()
             self.__update()
             self.__refresh()
-
+    def __load_sound_effects(self):
+        self.__snd_flip = None
+        self.__snd_match = None
+        self.__snd_win = None
+        
+        self.__snd_flip = pygame.mixer.Sound(r"sounds\\cardflip.mp3")
+        self.__snd_match = pygame.mixer.Sound(r"sounds\\matched.mp3")
+        self.__snd_win = pygame.mixer.Sound(r"sounds\\winsound.mp3")
     def __handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -83,6 +92,8 @@ class Main:
                         if self.__timer_start is None:
                             self.__timer_start = pygame.time.get_ticks()
                         tile.flip()
+                        self.__snd_flip.play()
+
                         self.__flipped_cards.append(tile)
                         if len(self.__flipped_cards) == 2:
                             self.__moves += 1
@@ -92,6 +103,7 @@ class Main:
     def __check_match(self):
         card1, card2 = self.__flipped_cards
         if card1.face_up_img == card2.face_up_img:
+            self.__snd_match.play()
             self.__flipped_cards = []
             self.__check_win()
         else:
@@ -102,6 +114,8 @@ class Main:
         if all(tile.is_flip for tile in self.all_tiles):
             self.__game_won = True
             self.__win_time = pygame.time.get_ticks()
+            pygame.mixer.music.stop()
+            self.__snd_win.play()
 
     def __update(self):
         
