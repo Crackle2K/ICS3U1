@@ -40,6 +40,8 @@ class Bubble:
 
 class Main:
     def __init__(self):
+        """ Creates the initial window, setting up the resolution and loading various assets. """
+        
         pygame.init()
         self.screen = pygame.display.set_mode((680, 480))
         pygame.display.set_caption("Ocean Blitz")
@@ -63,6 +65,8 @@ class Main:
         pygame.quit()
 
     def __show_title_screen(self):
+        """ Displays the title screen, with a clean menu UI as well as a cute bubble animation. """
+        
         clock = pygame.time.Clock()
 
         bg_raw = pygame.image.load(os.path.join(_DIR, "assets", "images", "title_screen.png")).convert()
@@ -103,12 +107,16 @@ class Main:
             pygame.display.flip()
 
     def __entities(self):
+        """ Ensures the background matches our windows resolution, removing any black bars from appearing. """
+        
         background = pygame.Surface(self.screen.get_size())
         self.background = background.convert()
         self.background.fill((10, 10, 40))
         self.__reset_game()
 
     def __reset_game(self):
+        """ Resets all of the game attributes, restarting the game back from the beginning. """
+        
         self.__flipped_cards = []
         self.__waiting = False
         self.__peeking = False
@@ -136,6 +144,8 @@ class Main:
         self.__build_grid_from_list(tiles)
 
     def __build_grid_from_list(self, tile_list):
+        """ Selects the sprites that will be appearing in the grid, pulling them from a list. """
+        
         self.all_tiles = pygame.sprite.Group()
         tilesize, margin = 100, 10
         for idx, (img, special) in enumerate(tile_list):
@@ -145,6 +155,8 @@ class Main:
             self.all_tiles.add(Tile(img, special, x, y))
 
     def __shuffle_only(self):
+        """ Shuffles the cards randomly, and rebuilds a completely new grid. """
+        
         if self.__game_won or self.__game_lost:
             return
         tiles = [(t.face_up_img, t.special) for t in self.all_tiles]
@@ -156,6 +168,8 @@ class Main:
         self.__build_grid_from_list(tiles)
 
     def __shuffle_remaining(self):
+        """ Only shuffles the cards that have not yet been selected, keeping flipped cards the same. """
+        
         if self.__game_won or self.__game_lost:
             return
 
@@ -182,6 +196,8 @@ class Main:
         self.__waiting = False
 
     def __load_music(self):
+        """ Loads the 'Aria Math' soundtrack to play in the background as ambient music. """
+        
         try:
             pygame.mixer.music.load(os.path.join(_DIR, "assets", "sounds", "aria_math.ogg"))
             pygame.mixer.music.play(-1)
@@ -189,6 +205,8 @@ class Main:
             pass
 
     def __load_sound_effects(self):
+        """ Loads all sound effects, to then be called smoothly during the game. """
+        
         self.__snd_flip = None
         self.__snd_match = None
         self.__snd_win = None
@@ -206,6 +224,8 @@ class Main:
             pass
 
     def __loop(self):
+        """ Loops the game infinitely until the loop function is stopped by another event. """
+        
         clock = pygame.time.Clock()
         self.__keep_going = True
         while self.__keep_going:
@@ -215,6 +235,8 @@ class Main:
             self.__refresh()
 
     def __handle_events(self):
+        """ Handles and processes all inputs from the user, and executes methods based on what input was met. """
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.__keep_going = False
@@ -252,6 +274,8 @@ class Main:
                             break
 
     def __check_match(self):
+        """ Checks whether two selected cards were a match. """
+        
         card1, card2 = self.__flipped_cards
         if card1.face_up_img == card2.face_up_img:
             if self.__snd_match:
@@ -267,6 +291,8 @@ class Main:
             self.__wait_timer = pygame.time.get_ticks()
 
     def __trigger_special(self, special_type):
+        """ Triggers a special event after selecting a special card. """
+        
         now = pygame.time.get_ticks()
         if special_type == "reveal":
             self.__peeked_tiles = [
@@ -286,9 +312,13 @@ class Main:
             self.__set_notification("BONUS! +500 pts, -3 moves", SPECIAL_COLORS["bonus"], 3000)
 
     def __set_notification(self, text, color, duration_ms):
+        """ This sets the notification text, used commonly after a special event is triggered. """
+        
         self.__notification = (text, color, pygame.time.get_ticks() + duration_ms)
 
     def __check_win(self):
+        """ Checks if a win condition has been met, then calculates the score."""
+        
         if all(t.is_matched for t in self.all_tiles):
             self.__game_won = True
             self.__win_time = pygame.time.get_ticks()
@@ -304,6 +334,8 @@ class Main:
             self.__score = accuracy_score + time_bonus + self.__bonus_points
 
     def __update(self):
+        """ Updates the game with what is currently happening in the program. """
+        
         if not self.__game_won and not self.__game_lost and self.__get_elapsed() == 0:
             self.__game_lost = True
 
@@ -323,6 +355,8 @@ class Main:
                 self.__peeking = False
 
     def __get_elapsed(self):
+        """ Retrieves the amount of time that has passed since the game started. """
+        
         if self.__timer_start is None:
             return self.__time_limit
         if self.__game_won:
@@ -332,6 +366,8 @@ class Main:
         return max(0, self.__time_limit - elapsed)
 
     def __refresh(self):
+        """ Refreshes the game to display the current attributes of all entities. """
+        
         self.screen.blit(self.background, (0, 0))
         self.all_tiles.draw(self.screen)
 
