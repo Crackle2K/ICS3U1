@@ -9,9 +9,9 @@ import pygame, random, math, os
 _DIR = os.path.dirname(os.path.abspath(__file__))
 
 SPECIAL_COLORS = {
-    "reveal":  (255, 215,   0),
-    "shuffle": (255, 140,   0),
-    "bonus":   (  0, 220, 100),
+    "reveal": (255, 215, 0),
+    "shuffle": (255, 140, 0),
+    "bonus": (0, 220, 100),
 }
 
 
@@ -20,9 +20,9 @@ class Bubble:
         self.__spawn(anywhere=True)
 
     def __spawn(self, anywhere=False):
-        self.x     = random.randint(0, 680)
-        self.y     = random.randint(0, 480) if anywhere else 492
-        self.r     = random.randint(3, 12)
+        self.x = random.randint(0, 680)
+        self.y = random.randint(0, 480) if anywhere else 492
+        self.r = random.randint(3, 12)
         self.speed = random.uniform(0.4, 1.8)
 
     def update(self):
@@ -47,11 +47,11 @@ class Main:
         cursor_image = pygame.transform.scale(cursor_image, (40, 40))
         pygame.mouse.set_cursor(pygame.Cursor((0, 0), cursor_image))
 
-        self.__time_limit          = 45
+        self.__time_limit = 45
         self.__shuffle_button_rect = pygame.Rect(520, 285, 130, 35)
-        self.__replay_button_rect  = pygame.Rect(520, 335, 130, 35)
-        self.__font                = pygame.font.SysFont("Arial", 22)
-        self.__small_font          = pygame.font.SysFont("Arial", 13)
+        self.__replay_button_rect = pygame.Rect(520, 335, 130, 35)
+        self.__font = pygame.font.SysFont("Arial", 22)
+        self.__small_font = pygame.font.SysFont("Arial", 13)
 
         self.__load_sound_effects()
 
@@ -65,17 +65,17 @@ class Main:
     def __show_title_screen(self):
         clock = pygame.time.Clock()
 
-        bg_raw  = pygame.image.load(os.path.join(_DIR, "assets", "images", "title_screen.png")).convert()
-        bg_img  = pygame.transform.scale(bg_raw, (680, 480))
+        bg_raw = pygame.image.load(os.path.join(_DIR, "assets", "images", "title_screen.png")).convert()
+        bg_img = pygame.transform.scale(bg_raw, (680, 480))
 
         play_rect = pygame.Rect(0, 0, 140, 50)
         play_rect.bottomright = (662, 462)
 
-        bubbles    = [Bubble() for _ in range(24)]
+        bubbles = [Bubble() for _ in range(24)]
         title_font = pygame.font.SysFont("Arial", 60, bold=True)
-        sub_font   = pygame.font.SysFont("Arial", 17)
-        head_font  = pygame.font.SysFont("Arial", 19, bold=True)
-        body_font  = pygame.font.SysFont("Arial", 15)
+        sub_font = pygame.font.SysFont("Arial", 17)
+        head_font = pygame.font.SysFont("Arial", 19, bold=True)
+        body_font = pygame.font.SysFont("Arial", 15)
 
         t = 0
         while True:
@@ -97,11 +97,11 @@ class Main:
                 b.update()
                 b.draw(self.screen)
 
-            bob         = int(math.sin(t * 0.06) * 7)
+            bob = int(math.sin(t * 0.06) * 7)
             shadow_surf = title_font.render("Ocean Blitz", True, (0, 50, 90))
-            title_surf  = title_font.render("Ocean Blitz", True, (0, 200, 255))
+            title_surf = title_font.render("Ocean Blitz", True, (0, 200, 255))
             self.screen.blit(shadow_surf, shadow_surf.get_rect(center=(342, 63 + bob)))
-            self.screen.blit(title_surf,  title_surf.get_rect(center=(340, 61 + bob)))
+            self.screen.blit(title_surf, title_surf.get_rect(center=(340, 61 + bob)))
 
             sub_surf = sub_font.render("A deep-sea memory challenge", True, (100, 170, 215))
             self.screen.blit(sub_surf, sub_surf.get_rect(center=(340, 107)))
@@ -109,7 +109,7 @@ class Main:
             pygame.draw.line(self.screen, (0, 70, 130), (55, 122), (625, 122), 1)
 
             lx, rx = 58, 362
-            yh     = 134
+            yh = 134
 
             how_surf = head_font.render("How to Play", True, (0, 200, 255))
             self.screen.blit(how_surf, (lx, yh))
@@ -136,15 +136,15 @@ class Main:
             self.screen.blit(ctrl_surf, (rx, yh))
 
             ctrl_lines = [
-                ("Left Click",  "Flip a card / press a button"),
-                ("Shuffle",     "Shuffle all cards"),
-                ("Replay",      "Start a new game"),
-                ("ESC",         "Quit"),
+                ("Left Click", "Flip a card / press a button"),
+                ("Shuffle", "Shuffle all cards"),
+                ("Replay", "Start a new game"),
+                ("ESC", "Quit"),
             ]
             ry = yh + 26
             for key, desc in ctrl_lines:
                 ks = body_font.render(key + ":", True, (255, 215, 0))
-                ds = body_font.render(desc,      True, (190, 215, 235))
+                ds = body_font.render(desc, True, (190, 215, 235))
                 self.screen.blit(ks, (rx + 4, ry))
                 self.screen.blit(ds, (rx + 4 + ks.get_width() + 5, ry))
                 ry += 20
@@ -155,9 +155,9 @@ class Main:
             ry += 24
 
             sp_info = [
-                ("reveal",  "Peek all unmatched cards (2s)"),
+                ("reveal", "Peek all unmatched cards (2s)"),
                 ("shuffle", "Shuffle remaining pairs"),
-                ("bonus",   "+500 pts  •  −3 moves"),
+                ("bonus", "+500 pts  •  −3 moves"),
             ]
             for stype, desc in sp_info:
                 color = SPECIAL_COLORS[stype]
@@ -168,8 +168,8 @@ class Main:
                 self.screen.blit(ds, (rx + 20 + ls.get_width() + 5, ry))
                 ry += 19
 
-            mouse_pos  = pygame.mouse.get_pos()
-            btn_color  = (60, 180, 80) if play_rect.collidepoint(mouse_pos) else (40, 140, 60)
+            mouse_pos = pygame.mouse.get_pos()
+            btn_color = (60, 180, 80) if play_rect.collidepoint(mouse_pos) else (40, 140, 60)
             pygame.draw.rect(self.screen, btn_color, play_rect, border_radius=8)
             pygame.draw.rect(self.screen, (100, 255, 130), play_rect, width=2, border_radius=8)
             play_lbl = head_font.render("PLAY", True, (255, 255, 255))
@@ -185,22 +185,22 @@ class Main:
 
     def __reset_game(self):
         self.__flipped_cards = []
-        self.__waiting       = False
-        self.__peeking       = False
-        self.__peeked_tiles  = []
-        self.__peek_timer    = 0
-        self.__moves         = 0
-        self.__timer_start   = None
-        self.__win_time      = None
-        self.__game_won      = False
-        self.__game_lost     = False
-        self.__score         = 0
-        self.__bonus_points  = 0
-        self.__notification  = None
+        self.__waiting = False
+        self.__peeking = False
+        self.__peeked_tiles = []
+        self.__peek_timer = 0
+        self.__moves = 0
+        self.__timer_start = None
+        self.__win_time = None
+        self.__game_won = False
+        self.__game_lost = False
+        self.__score = 0
+        self.__bonus_points = 0
+        self.__notification = None
 
         image_list = [
             "person.png", "ocean.png", "beach.png", "diver.png",
-            "cave.png",   "shark.png", "jellyfish.png", "pearl.png",
+            "cave.png", "shark.png", "jellyfish.png", "pearl.png",
         ]
 
         special_images = random.sample(image_list, 3)
@@ -216,7 +216,7 @@ class Main:
         for idx, (img, special) in enumerate(tile_list):
             row, col = divmod(idx, 4)
             x = 100 + col * (tilesize + margin)
-            y =  20 + row * (tilesize + margin)
+            y = 20 + row * (tilesize + margin)
             self.all_tiles.add(Tile(img, special, x, y))
 
     def __shuffle_only(self):
@@ -225,26 +225,26 @@ class Main:
         tiles = [(t.face_up_img, t.special) for t in self.all_tiles]
         random.shuffle(tiles)
         self.__flipped_cards = []
-        self.__waiting       = False
-        self.__peeking       = False
-        self.__peeked_tiles  = []
+        self.__waiting = False
+        self.__peeking = False
+        self.__peeked_tiles = []
         self.__build_grid_from_list(tiles)
 
     def __shuffle_remaining(self):
         if self.__game_won or self.__game_lost:
             return
 
-        all_list       = list(self.all_tiles)
-        matched_data   = [(t.rect.left, t.rect.top, t.face_up_img, t.special)
-                          for t in all_list if t.is_matched]
-        unmatched_pos  = [(t.rect.left, t.rect.top) for t in all_list if not t.is_matched]
+        all_list = list(self.all_tiles)
+        matched_data = [(t.rect.left, t.rect.top, t.face_up_img, t.special)
+                        for t in all_list if t.is_matched]
+        unmatched_pos = [(t.rect.left, t.rect.top) for t in all_list if not t.is_matched]
         unmatched_data = [(t.face_up_img, t.special) for t in all_list if not t.is_matched]
 
         random.shuffle(unmatched_data)
         self.all_tiles = pygame.sprite.Group()
 
         for x, y, img, special in matched_data:
-            t            = Tile(img, special, x, y)
+            t = Tile(img, special, x, y)
             t.is_matched = True
             t.flip()
             self.all_tiles.add(t)
@@ -254,7 +254,7 @@ class Main:
             self.all_tiles.add(Tile(img, special, x, y))
 
         self.__flipped_cards = []
-        self.__waiting       = False
+        self.__waiting = False
 
     def __load_music(self):
         try:
@@ -264,11 +264,11 @@ class Main:
             pass
 
     def __load_sound_effects(self):
-        self.__snd_flip  = None
+        self.__snd_flip = None
         self.__snd_match = None
-        self.__snd_win   = None
+        self.__snd_win = None
         try:
-            self.__snd_flip  = pygame.mixer.Sound(os.path.join(_DIR, "assets", "sounds", "cardflip.mp3"))
+            self.__snd_flip = pygame.mixer.Sound(os.path.join(_DIR, "assets", "sounds", "cardflip.mp3"))
         except Exception:
             pass
         try:
@@ -276,7 +276,7 @@ class Main:
         except Exception:
             pass
         try:
-            self.__snd_win   = pygame.mixer.Sound(os.path.join(_DIR, "assets", "sounds", "winsound.mp3"))
+            self.__snd_win = pygame.mixer.Sound(os.path.join(_DIR, "assets", "sounds", "winsound.mp3"))
         except Exception:
             pass
 
@@ -338,7 +338,7 @@ class Main:
             self.__flipped_cards = []
             self.__check_win()
         else:
-            self.__waiting    = True
+            self.__waiting = True
             self.__wait_timer = pygame.time.get_ticks()
 
     def __trigger_special(self, special_type):
@@ -349,7 +349,7 @@ class Main:
             ]
             for t in self.__peeked_tiles:
                 t.flip()
-            self.__peeking    = True
+            self.__peeking = True
             self.__peek_timer = now
             self.__set_notification("REVEAL! Cards shown for 2s", SPECIAL_COLORS["reveal"], 3000)
         elif special_type == "shuffle":
@@ -371,12 +371,12 @@ class Main:
             if self.__snd_win:
                 self.__snd_win.play()
 
-            elapsed        = (self.__win_time - self.__timer_start) // 1000
+            elapsed = (self.__win_time - self.__timer_start) // 1000
             remaining_time = max(0, self.__time_limit - elapsed)
-            extra_moves    = max(0, self.__moves - 8)
+            extra_moves = max(0, self.__moves - 8)
             accuracy_score = max(0, 10000 - extra_moves * 250)
-            time_bonus     = remaining_time * 100
-            self.__score   = accuracy_score + time_bonus + self.__bonus_points
+            time_bonus = remaining_time * 100
+            self.__score = accuracy_score + time_bonus + self.__bonus_points
 
     def __update(self):
         if not self.__game_won and not self.__game_lost and self.__get_elapsed() == 0:
@@ -387,7 +387,7 @@ class Main:
                 for t in self.__flipped_cards:
                     t.flip()
                 self.__flipped_cards = []
-                self.__waiting       = False
+                self.__waiting = False
 
         if self.__peeking:
             if pygame.time.get_ticks() - self.__peek_timer > 2000:
@@ -395,7 +395,7 @@ class Main:
                     if not t.is_matched:
                         t.flip()
                 self.__peeked_tiles = []
-                self.__peeking      = False
+                self.__peeking = False
 
     def __get_elapsed(self):
         if self.__timer_start is None:
@@ -410,11 +410,11 @@ class Main:
         self.screen.blit(self.background, (0, 0))
         self.all_tiles.draw(self.screen)
 
-        elapsed    = self.__get_elapsed()
+        elapsed = self.__get_elapsed()
         moves_surf = self.__font.render(f"Moves: {self.__moves}", True, (255, 255, 255))
-        time_surf  = self.__font.render(f"Remaining: {elapsed}s", True, (255, 255, 255))
+        time_surf = self.__font.render(f"Remaining: {elapsed}s", True, (255, 255, 255))
         self.screen.blit(moves_surf, (530, 180))
-        self.screen.blit(time_surf,  (530, 225))
+        self.screen.blit(time_surf, (530, 225))
 
         if self.__notification:
             text, color, expire = self.__notification
@@ -431,7 +431,7 @@ class Main:
             self.screen.blit(lbl, (538, legend_y))
             legend_y += 18
 
-        mouse_pos  = pygame.mouse.get_pos()
+        mouse_pos = pygame.mouse.get_pos()
         shuf_color = (60, 130, 200) if self.__shuffle_button_rect.collidepoint(mouse_pos) else (40, 90, 160)
         pygame.draw.rect(self.screen, shuf_color, self.__shuffle_button_rect, border_radius=6)
         shuf_txt = self.__font.render("Shuffle", True, (255, 255, 255))
@@ -454,13 +454,13 @@ class Main:
         overlay.fill((0, 0, 0, 160))
         self.screen.blit(overlay, (0, 0))
 
-        big_font   = pygame.font.SysFont("Arial", 48)
-        win_surf   = big_font.render("You Win!", True, (255, 215, 0))
+        big_font = pygame.font.SysFont("Arial", 48)
+        win_surf = big_font.render("You Win!", True, (255, 215, 0))
         stats_surf = self.__font.render(
             f"Moves: {self.__moves}   Time: {self.__time_limit - elapsed}s", True, (255, 255, 255)
         )
         score_surf = big_font.render(f"Score: {self.__score}", True, (0, 255, 128))
-        self.screen.blit(win_surf,   win_surf.get_rect(center=(320, 210)))
+        self.screen.blit(win_surf, win_surf.get_rect(center=(320, 210)))
         self.screen.blit(stats_surf, stats_surf.get_rect(center=(320, 270)))
         self.screen.blit(score_surf, score_surf.get_rect(center=(320, 300)))
 
@@ -469,10 +469,10 @@ class Main:
         overlay.fill((0, 0, 0, 160))
         self.screen.blit(overlay, (0, 0))
 
-        big_font   = pygame.font.SysFont("Arial", 48)
-        lose_surf  = big_font.render("Game Over!", True, (220, 20, 60))
+        big_font = pygame.font.SysFont("Arial", 48)
+        lose_surf = big_font.render("Game Over!", True, (220, 20, 60))
         stats_surf = self.__font.render("You ran out of time.", True, (255, 255, 255))
-        self.screen.blit(lose_surf,  lose_surf.get_rect(center=(320, 210)))
+        self.screen.blit(lose_surf, lose_surf.get_rect(center=(320, 210)))
         self.screen.blit(stats_surf, stats_surf.get_rect(center=(320, 270)))
 
 
@@ -480,17 +480,17 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, face_up, special, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.face_up_img = face_up
-        self.special     = special
-        self.is_flip     = False
-        self.is_matched  = False
+        self.special = special
+        self.is_flip = False
+        self.is_matched = False
 
         self.image = self.__make_back()
-        self.rect  = self.image.get_rect()
+        self.rect = self.image.get_rect()
         self.rect.left = x
-        self.rect.top  = y
+        self.rect.top = y
 
     def __make_back(self):
-        raw  = pygame.image.load(os.path.join(_DIR, "assets", "images", "back.png")).convert_alpha()
+        raw = pygame.image.load(os.path.join(_DIR, "assets", "images", "back.png")).convert_alpha()
         surf = pygame.transform.scale(raw, (100, 100))
         if self.special:
             pygame.draw.rect(surf, SPECIAL_COLORS[self.special],
@@ -500,7 +500,7 @@ class Tile(pygame.sprite.Sprite):
     def flip(self):
         self.is_flip = not self.is_flip
         if self.is_flip:
-            raw  = pygame.image.load(os.path.join(_DIR, "assets", "images", self.face_up_img)).convert_alpha()
+            raw = pygame.image.load(os.path.join(_DIR, "assets", "images", self.face_up_img)).convert_alpha()
             surf = pygame.transform.scale(raw, (100, 100))
             if self.special:
                 pygame.draw.rect(surf, SPECIAL_COLORS[self.special],
