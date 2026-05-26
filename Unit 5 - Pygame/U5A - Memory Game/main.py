@@ -92,27 +92,7 @@ class Main:
             for b in bubbles:
                 b.update()
                 b.draw(self.screen)
-
-            rx = 362
-            ry = 134
-            sp_surf = head_font.render("Special Cards", True, (0, 200, 255))
-            self.screen.blit(sp_surf, (rx, ry))
-            ry += 24
-
-            sp_info = [
-                ("reveal", "Peek all unmatched cards (2s)"),
-                ("shuffle", "Shuffle remaining pairs"),
-                ("bonus", "+500 pts  •  −3 moves"),
-            ]
-            for stype, desc in sp_info:
-                color = SPECIAL_COLORS[stype]
-                pygame.draw.rect(self.screen, color, (rx + 4, ry + 3, 11, 11), border_radius=2)
-                ls = body_font.render(stype.capitalize() + ":", True, color)
-                ds = body_font.render(desc, True, (190, 215, 235))
-                self.screen.blit(ls, (rx + 20, ry))
-                self.screen.blit(ds, (rx + 20 + ls.get_width() + 5, ry))
-                ry += 19
-
+            
             mouse_pos = pygame.mouse.get_pos()
             btn_color = (60, 180, 80) if play_rect.collidepoint(mouse_pos) else (40, 140, 60)
             pygame.draw.rect(self.screen, btn_color, play_rect, border_radius=8)
