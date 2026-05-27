@@ -5,15 +5,9 @@ Description: Complex memory game built in Pygame, featuring original sprites, op
 Some special cards will temporarily reveal the board, or shuffle all the cards, or give you 500 bonus points. 
 """
 
-import pygame, random, math, os
+import pygame, random, os
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
-
-SPECIAL_COLORS = {
-    "reveal": (255, 215, 0),
-    "shuffle": (255, 140, 0),
-    "bonus": (0, 220, 100),
-}
 
 
 class Bubble:
@@ -157,7 +151,8 @@ class Main:
         
         self.all_tiles = pygame.sprite.Group()
         tilesize, margin = 100, 10
-        for idx, (img, special) in enumerate(tile_list):
+        for idx in range(len(tile_list)):
+            img, special = tile_list[idx]
             row, col = divmod(idx, 4)
             x = 100 + col * (tilesize + margin)
             y = 20 + row * (tilesize + margin)
@@ -197,8 +192,7 @@ class Main:
             t.flip()
             self.all_tiles.add(t)
 
-        for i, (img, special) in enumerate(unmatched_data):
-            x, y = unmatched_pos[i]
+        for (img, special), (x, y) in zip(unmatched_data, unmatched_pos):
             self.all_tiles.add(Tile(img, special, x, y))
 
         self.__flipped_cards = []
@@ -311,14 +305,14 @@ class Main:
                 t.flip()
             self.__peeking = True
             self.__peek_timer = now
-            self.__set_notification("REVEAL! Cards shown for 2s", SPECIAL_COLORS["reveal"], 3000)
+            self.__set_notification("REVEAL! Cards shown for 2s", (255, 215, 0), 3000)
         elif special_type == "shuffle":
             self.__shuffle_remaining()
-            self.__set_notification("SHUFFLE! Remaining cards mixed", SPECIAL_COLORS["shuffle"], 3000)
+            self.__set_notification("SHUFFLE! Remaining cards mixed", (255, 140, 0), 3000)
         elif special_type == "bonus":
             self.__bonus_points += 500
             self.__moves = max(0, self.__moves - 3)
-            self.__set_notification("BONUS! +500 pts, -3 moves", SPECIAL_COLORS["bonus"], 3000)
+            self.__set_notification("BONUS! +500 pts, -3 moves", (0, 220, 100), 3000)
 
     def __set_notification(self, text, color, duration_ms):
         """ This sets the notification text, used commonly after a special event is triggered. """
@@ -395,11 +389,14 @@ class Main:
                 self.__notification = None
 
         legend_y = 390
-        for stype, color in SPECIAL_COLORS.items():
-            pygame.draw.rect(self.screen, color, (522, legend_y, 12, 12), border_radius=2)
-            lbl = self.__small_font.render(stype.capitalize(), True, (200, 200, 200))
-            self.screen.blit(lbl, (538, legend_y))
-            legend_y += 18
+        pygame.draw.rect(self.screen, (255, 215, 0), (522, legend_y, 12, 12), border_radius=2)
+        self.screen.blit(self.__small_font.render("Reveal", True, (200, 200, 200)), (538, legend_y))
+        legend_y += 18
+        pygame.draw.rect(self.screen, (255, 140, 0), (522, legend_y, 12, 12), border_radius=2)
+        self.screen.blit(self.__small_font.render("Shuffle", True, (200, 200, 200)), (538, legend_y))
+        legend_y += 18
+        pygame.draw.rect(self.screen, (0, 220, 100), (522, legend_y, 12, 12), border_radius=2)
+        self.screen.blit(self.__small_font.render("Bonus", True, (200, 200, 200)), (538, legend_y))
             
         self.__color_refresh()
 
@@ -481,9 +478,12 @@ class Tile(pygame.sprite.Sprite):
         
         raw = pygame.image.load(os.path.join(_DIR, "assets", "images", "back.png")).convert_alpha()
         surf = pygame.transform.scale(raw, (100, 100))
-        if self.special:
-            pygame.draw.rect(surf, SPECIAL_COLORS[self.special],
-                             surf.get_rect(), width=5, border_radius=5)
+        if self.special == "reveal":
+            pygame.draw.rect(surf, (255, 215, 0), surf.get_rect(), width=5, border_radius=5)
+        elif self.special == "shuffle":
+            pygame.draw.rect(surf, (255, 140, 0), surf.get_rect(), width=5, border_radius=5)
+        elif self.special == "bonus":
+            pygame.draw.rect(surf, (0, 220, 100), surf.get_rect(), width=5, border_radius=5)
         return surf
 
     def flip(self):
@@ -493,9 +493,12 @@ class Tile(pygame.sprite.Sprite):
         if self.is_flip:
             raw = pygame.image.load(os.path.join(_DIR, "assets", "images", self.face_up_img)).convert_alpha()
             surf = pygame.transform.scale(raw, (100, 100))
-            if self.special:
-                pygame.draw.rect(surf, SPECIAL_COLORS[self.special],
-                                 surf.get_rect(), width=5, border_radius=5)
+            if self.special == "reveal":
+                pygame.draw.rect(surf, (255, 215, 0), surf.get_rect(), width=5, border_radius=5)
+            elif self.special == "shuffle":
+                pygame.draw.rect(surf, (255, 140, 0), surf.get_rect(), width=5, border_radius=5)
+            elif self.special == "bonus":
+                pygame.draw.rect(surf, (0, 220, 100), surf.get_rect(), width=5, border_radius=5)
             self.image = surf
         else:
             self.image = self.__make_back()
